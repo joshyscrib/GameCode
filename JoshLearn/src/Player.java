@@ -4,6 +4,7 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 
+// Player
 public class Player {
     Direction playerDirection = Direction.Right;
     int tickCount = 0;

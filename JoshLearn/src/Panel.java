@@ -19,6 +19,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     double mouseY = location.getY();
     Class menuTile = GrassTile.class;
 
+    // here is a comment
     public void setMenuTile(Class c) {
         menuTile = c;
     }
