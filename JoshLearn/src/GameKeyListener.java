@@ -7,6 +7,7 @@ public class GameKeyListener implements KeyListener {
     public boolean lefting = false;
     public boolean downing = false;
     public boolean righting = false;
+    public boolean attacking = false;
 
     public GameKeyListener(Panel panel) {
 
@@ -34,6 +35,9 @@ public class GameKeyListener implements KeyListener {
             case 70:
                 righting = true;
                 break;
+            case 32:
+                attacking = true;
+                break;
         }
     }
 
@@ -52,6 +56,9 @@ public class GameKeyListener implements KeyListener {
                 break;
             case 70:
                 righting = false;
+                break;
+            case 32:
+                attacking = false;
                 break;
         }
     }

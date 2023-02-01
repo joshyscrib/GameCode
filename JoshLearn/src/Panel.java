@@ -1,5 +1,6 @@
 import javax.swing.JPanel;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Random;
 import java.awt.event.*;
 import java.io.File;
@@ -17,8 +18,8 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     Point location = MouseInfo.getPointerInfo().getLocation();
     double mouseX = location.getX();
     double mouseY = location.getY();
-    Class menuTile = GrassTile.class;
-
+    Class menuTile = FloorTile.class;
+    ArrayList<Mob> mobs = new ArrayList<Mob>();
     // here is a comment
     public void setMenuTile(Class c) {
         menuTile = c;
@@ -28,10 +29,13 @@ public class Panel extends JPanel implements Runnable, MouseListener {
 
         for (int i = 0; i < xTiles; i++) {
             for (int j = 0; j < yTiles; j++) {
-                tiles[i][j] = new GrassTile();
+                tiles[i][j] = new FloorTile();
             }
         }
-
+        for(int i = 0; i < 5; i++){
+        Mob mob = new Mob();
+        mobs.add(mob);
+    }
         addMouseListener(this);
 
     }
@@ -72,9 +76,18 @@ public class Panel extends JPanel implements Runnable, MouseListener {
 
     double speed = 5.5;
 
+    public void clearAll(){
+        for(int i = 0; i < tiles.length; i++){
+            for(int j = 0; j < tiles[0].length; j++){
+                tiles[i][j] = null;
+                tiles[i][j] = new FloorTile();
+            }
+        }
+    }
+
     public boolean canMovePlayer(int X, int Y) {
         if (doesPointCollide(X, Y) && doesPointCollide(X + 40, Y) && doesPointCollide(X, Y + 63)
-                && doesPointCollide(X + 40, Y + 64) && X > 0 && X < 672 && Y > 0 && Y < 672) {
+                && doesPointCollide(X + 40, Y + 64) && X > 0 && X < 672 && Y > 0 && Y < 672 && doesPointCollide(X + 20, Y) && doesPointCollide(X, Y + 30) && doesPointCollide(X + 45, Y + 30) && doesPointCollide(X + 20, Y + 60)) {
             return true;
         } else {
             return false;
@@ -84,12 +97,19 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     public boolean doesPointCollide(int X, int Y) {
         if (X < 0 || X > 703 || Y < 0 || Y > 703 || tiles[(int) Math.floor(X / 32)][(int) Math.floor(Y / 32)].solid) {
             return false;
-        } else {
-            return true;
         }
+        for(Mob bro : mobs){
+            if(X > bro.x && X < bro.x + bro.xSide && Y > bro.y && Y < bro.y + bro.ySide){
+                return false;
+            }
+        }
+            return true;   
     }
 
     public void tick() {
+        for(Mob curMob : mobs){
+            curMob.tick(tiles, dude, mobs);
+        }
         location = MouseInfo.getPointerInfo().getLocation();
         Point panelLocation = this.getLocation();
         mouseX = location.getX() - panelLocation.getX();
@@ -129,6 +149,15 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         }
         if (listener.righting) {
             dude.playerDirection = Direction.Right;
+        }
+        if (listener.uping) {
+            dude.playerDirection = Direction.Up;
+        }
+        if (listener.downing) {
+            dude.playerDirection = Direction.Down;
+        }
+        if(listener.attacking) {
+            dude.attack();
         }
     }
 
@@ -180,6 +209,9 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                 break;
             case "WoodTile":
                 placeTile = new WoodTile();
+                break;
+            case "FloorTile":
+                placeTile = new FloorTile();
                 break;
 
         }

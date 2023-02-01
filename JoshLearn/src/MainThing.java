@@ -14,8 +14,22 @@ public class MainThing {
 
 
         MenuBar bar = new MenuBar();
-
+        Menu file = new Menu("File");
+        
+        MenuItem SaveItem = new MenuItem("Save");
+        file.add(SaveItem);
+        MenuItem LoadItem = new MenuItem("Load");
+        file.add(LoadItem);
+        SaveItem.addActionListener(action -> myPanel.save());
+        LoadItem.addActionListener(action -> myPanel.load());
         Menu main = new Menu("Tiles");
+        bar.add(file);
+        
+        Menu edit = new Menu("Edit");
+        MenuItem clearItem = new MenuItem("Clear");
+        edit.add(clearItem);
+        clearItem.addActionListener(action -> myPanel.clearAll());
+        bar.add(edit);
         bar.add(main);
 
         MenuItem GrassItem = new MenuItem("Grass");
@@ -27,16 +41,11 @@ public class MainThing {
         MenuItem WoodItem = new MenuItem("Wood");
         main.add(WoodItem);
         WoodItem.addActionListener(action -> myPanel.setMenuTile(WoodTile.class));
-        
+        MenuItem FloorItem = new MenuItem("Floor");
+        main.add(FloorItem);
+        FloorItem.addActionListener(action -> myPanel.setMenuTile(FloorTile.class));
 
-        Menu file = new Menu("File");
-        bar.add(file);
-        MenuItem SaveItem = new MenuItem("Save");
-        file.add(SaveItem);
-        MenuItem LoadItem = new MenuItem("Load");
-        file.add(LoadItem);
-        SaveItem.addActionListener(action -> myPanel.save());
-        LoadItem.addActionListener(action -> myPanel.load());
+        
 
         myFrame.setMenuBar(bar);
 

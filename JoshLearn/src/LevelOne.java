@@ -14,5 +14,8 @@ public class LevelOne extends Panel{
             }
         }
         dude.paint(context,placeX,placeY);
+        for(Mob curMob : mobs){
+            curMob.paint(context);
+        }
     }
 }
