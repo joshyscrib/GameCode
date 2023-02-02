@@ -3,7 +3,7 @@ public class LevelOne extends Panel{
     @Override
     public void paint(Graphics g){
         Graphics2D context = (Graphics2D) g;
-        context.setColor(new Color(230,1,255));
+        context.setColor(new Color(30,1,60));
         context.fillRect(0,0,3000,3000);
         super.paint(g);
         for(int x = 0; x < xTiles; x++){

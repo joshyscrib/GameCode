@@ -3,10 +3,10 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Sprite {
-    int hp;
-    int def;
-    int x = 100;
-    int y = 100;
+    int hp = 10;
+    int def = 0;
+    int x = 20;
+    int y = 20;
     int xSide = 32;
     int ySide = 64;
     int n = 4;
@@ -150,5 +150,14 @@ public class Sprite {
         }
         
     }
-
-}
+    public void gotHit(int dmg){
+        hp -= (dmg - def);
+        System.out.println("hitPoints: " + hp);
+        if(hp <= 0){
+            System.out.println("IM DEAD ):");
+        }
+    }
+    public boolean isDead(){
+        return hp <= 0;
+    }
+}   

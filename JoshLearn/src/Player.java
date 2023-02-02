@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
@@ -10,8 +11,8 @@ public class Player {
     int tickCount = 0;
     private int animationIndex = 0;
     int hp = 100;
-    int atk = 5;
-    int def = 2;
+    int atk = 3;
+    int def = 0;
     boolean isMoving = false;
     Item[] inventory;
     boolean isAttacking = false;
@@ -49,8 +50,16 @@ public class Player {
         }
     }
 
-    public void attack() {
+    public void attack(ArrayList<Mob> mobs, int x, int y) {
         isAttacking = true;
+        int attackX = x + 32 + 30;
+        int attackY = y + 30;
+        for(Mob curMob : mobs){
+            if(attackX >= curMob.x && attackX < curMob.x + 32 && attackY >= curMob.y && attackY < curMob.y + 64){
+                System.out.println("hit!");
+                curMob.gotHit(atk);
+            }
+        }
     }
 
     public void paint(Graphics2D context, int x, int y) {
@@ -72,7 +81,7 @@ public class Player {
             context.setColor(Color.GRAY);
             switch(playerDirection){
             case Up:
-            context.fillRect(x + 15, y, 10, 30);
+            context.fillRect(x + 15, y - 5, 10, 30);
                 break;
             case Left:
             context.fillRect(x,y + 27,-30,10);

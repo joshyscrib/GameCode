@@ -16,12 +16,38 @@ public class MainThing {
         MenuBar bar = new MenuBar();
         Menu file = new Menu("File");
         
-        MenuItem SaveItem = new MenuItem("Save");
-        file.add(SaveItem);
-        MenuItem LoadItem = new MenuItem("Load");
-        file.add(LoadItem);
-        SaveItem.addActionListener(action -> myPanel.save());
-        LoadItem.addActionListener(action -> myPanel.load());
+        MenuItem SaveItem1 = new MenuItem("Save1");
+        file.add(SaveItem1);
+        MenuItem SaveItem2 = new MenuItem("Save2");
+        file.add(SaveItem2);
+        MenuItem SaveItem3 = new MenuItem("Save3");
+        file.add(SaveItem3);
+        MenuItem SaveItem4 = new MenuItem("Save4");
+        file.add(SaveItem4);
+        MenuItem SaveItem5 = new MenuItem("Save5");
+        file.add(SaveItem5);
+
+        MenuItem LoadItem1 = new MenuItem("Load1");
+        file.add(LoadItem1);
+        MenuItem LoadItem2 = new MenuItem("Load2");
+        file.add(LoadItem2);
+        MenuItem LoadItem3 = new MenuItem("Load3");
+        file.add(LoadItem3);
+        MenuItem LoadItem4 = new MenuItem("Load4");
+        file.add(LoadItem4);
+        MenuItem LoadItem5 = new MenuItem("Load5");
+        file.add(LoadItem5);
+        SaveItem1.addActionListener(action -> myPanel.save("LevelOne.game"));
+        SaveItem2.addActionListener(action -> myPanel.save("LevelTwo.game"));
+        SaveItem3.addActionListener(action -> myPanel.save("LevelThree.game"));
+        SaveItem4.addActionListener(action -> myPanel.save("LevelFour.game"));
+        SaveItem5.addActionListener(action -> myPanel.save("LevelFive.game"));
+
+        LoadItem1.addActionListener(action -> myPanel.load("LevelOne.game"));
+        LoadItem2.addActionListener(action -> myPanel.load("LevelTwo.game"));
+        LoadItem3.addActionListener(action -> myPanel.load("LevelThree.game"));
+        LoadItem4.addActionListener(action -> myPanel.load("LevelFour.game"));
+        LoadItem5.addActionListener(action -> myPanel.load("LevelFive.game"));
         Menu main = new Menu("Tiles");
         bar.add(file);
         

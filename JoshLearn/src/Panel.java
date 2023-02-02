@@ -37,12 +37,12 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         mobs.add(mob);
     }
         addMouseListener(this);
-
+  load("LevelOne.game");
     }
 
-    public void save() {
+    public void save(String place) {
         try {
-            FileOutputStream thing = new FileOutputStream(new File("LevelOne.game"));
+            FileOutputStream thing = new FileOutputStream(new File(place));
             ObjectOutputStream stream = new ObjectOutputStream(thing);
             stream.writeObject(tiles);
 
@@ -54,9 +54,9 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         System.out.println("We are saving!!!!");
     }
 
-    public void load() {
+    public void load(String place) {
         try {
-            FileInputStream thing = new FileInputStream(new File("LevelOne.game"));
+            FileInputStream thing = new FileInputStream(new File(place));
             ObjectInputStream stream = new ObjectInputStream(thing);
             tiles = (Tile[][]) stream.readObject();
 
@@ -107,9 +107,18 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     }
 
     public void tick() {
-        for(Mob curMob : mobs){
-            curMob.tick(tiles, dude, mobs);
+        if(listener.attacking) {
+            dude.attack(mobs, placeX, placeY);
         }
+
+        for(int i = mobs.size() - 1; i >= 0; i--){
+            Mob curMob = mobs.get(i);
+            curMob.tick(tiles, dude, mobs);
+            if(curMob.isDead()){
+                mobs.remove(i);
+            }
+        }
+
         location = MouseInfo.getPointerInfo().getLocation();
         Point panelLocation = this.getLocation();
         mouseX = location.getX() - panelLocation.getX();
@@ -156,9 +165,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         if (listener.downing) {
             dude.playerDirection = Direction.Down;
         }
-        if(listener.attacking) {
-            dude.attack();
-        }
+    
     }
 
     int placeX = 10;
