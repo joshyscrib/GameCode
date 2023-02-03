@@ -20,6 +20,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     double mouseY = location.getY();
     Class menuTile = FloorTile.class;
     ArrayList<Mob> mobs = new ArrayList<Mob>();
+
     // here is a comment
     public void setMenuTile(Class c) {
         menuTile = c;
@@ -32,12 +33,12 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                 tiles[i][j] = new FloorTile();
             }
         }
-        for(int i = 0; i < 5; i++){
-        Mob mob = new Mob();
-        mobs.add(mob);
-    }
+        for (int i = 0; i < 10; i++) {
+            Guard guard = new Guard();
+            mobs.add(guard);
+        }
         addMouseListener(this);
-  load("LevelOne.game");
+        load("LevelOne.game");
     }
 
     public void save(String place) {
@@ -74,11 +75,11 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         tiles[0][0].drawTile(context, 0, 0);
     }
 
-    double speed = 5.5;
+    double speed = 10;
 
-    public void clearAll(){
-        for(int i = 0; i < tiles.length; i++){
-            for(int j = 0; j < tiles[0].length; j++){
+    public void clearAll() {
+        for (int i = 0; i < tiles.length; i++) {
+            for (int j = 0; j < tiles[0].length; j++) {
                 tiles[i][j] = null;
                 tiles[i][j] = new FloorTile();
             }
@@ -87,7 +88,9 @@ public class Panel extends JPanel implements Runnable, MouseListener {
 
     public boolean canMovePlayer(int X, int Y) {
         if (doesPointCollide(X, Y) && doesPointCollide(X + 40, Y) && doesPointCollide(X, Y + 63)
-                && doesPointCollide(X + 40, Y + 64) && X > 0 && X < 672 && Y > 0 && Y < 672 && doesPointCollide(X + 20, Y) && doesPointCollide(X, Y + 30) && doesPointCollide(X + 45, Y + 30) && doesPointCollide(X + 20, Y + 60)) {
+                && doesPointCollide(X + 40, Y + 64) && X > 0 && X < 672 && Y > 0 && Y < 672
+                && doesPointCollide(X + 20, Y) && doesPointCollide(X, Y + 30) && doesPointCollide(X + 45, Y + 30)
+                && doesPointCollide(X + 20, Y + 60)) {
             return true;
         } else {
             return false;
@@ -98,23 +101,18 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         if (X < 0 || X > 703 || Y < 0 || Y > 703 || tiles[(int) Math.floor(X / 32)][(int) Math.floor(Y / 32)].solid) {
             return false;
         }
-        for(Mob bro : mobs){
-            if(X > bro.x && X < bro.x + bro.xSide && Y > bro.y && Y < bro.y + bro.ySide){
-                return false;
-            }
-        }
-            return true;   
+        return true;
     }
 
     public void tick() {
-        if(listener.attacking) {
+        if (listener.attacking) {
             dude.attack(mobs, placeX, placeY);
         }
 
-        for(int i = mobs.size() - 1; i >= 0; i--){
+        for (int i = mobs.size() - 1; i >= 0; i--) {
             Mob curMob = mobs.get(i);
             curMob.tick(tiles, dude, mobs);
-            if(curMob.isDead()){
+            if (curMob.isDead()) {
                 mobs.remove(i);
             }
         }
@@ -165,11 +163,11 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         if (listener.downing) {
             dude.playerDirection = Direction.Down;
         }
-    
+
     }
 
-    int placeX = 10;
-    int placeY = 10;
+    int placeX = 200;
+    int placeY = 200;
 
     @Override
     public void run() {
@@ -220,6 +218,18 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             case "FloorTile":
                 placeTile = new FloorTile();
                 break;
+            case "BarrelTile":
+                placeTile = new BarrelTile();
+                break;
+            case "BarsTile":
+                placeTile = new BarsTile();
+                break;
+            case "SBarTile":
+                placeTile = new SBarTile();
+                break;
+            case "WoodBarsTile":
+                placeTile = new WoodBarsTile();
+                break;
 
         }
         if (placeTile != null) {
@@ -230,13 +240,85 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     @Override
     public void mousePressed(MouseEvent e) {
         // TODO Auto-generated method stub
+        int x = e.getX();
+        int y = e.getY();
+        Tile curTile = tiles[(int) (x / 32)][(int) (y / 32)];
 
+        System.out.println("Placing " + menuTile.getName());
+
+        Tile placeTile = null;
+        switch (menuTile.getName()) {
+            case "GrassTile":
+                placeTile = new GrassTile();
+                break;
+            case "WallTile":
+                placeTile = new WallTile();
+                break;
+            case "WoodTile":
+                placeTile = new WoodTile();
+                break;
+            case "FloorTile":
+                placeTile = new FloorTile();
+                break;
+            case "BarrelTile":
+                placeTile = new BarrelTile();
+                break;
+            case "BarsTile":
+                placeTile = new BarsTile();
+                break;
+            case "SBarTile":
+                placeTile = new SBarTile();
+                break;
+            case "WoodBarsTile":
+                placeTile = new WoodBarsTile();
+                break;
+
+        }
+        if (placeTile != null) {
+            tiles[(int) (x / 32)][(int) (y / 32)] = placeTile;
+        }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
         // TODO Auto-generated method stub
+        int x = e.getX();
+        int y = e.getY();
+        Tile curTile = tiles[(int) (x / 32)][(int) (y / 32)];
 
+        System.out.println("Placing " + menuTile.getName());
+
+        Tile placeTile = null;
+        switch (menuTile.getName()) {
+            case "GrassTile":
+                placeTile = new GrassTile();
+                break;
+            case "WallTile":
+                placeTile = new WallTile();
+                break;
+            case "WoodTile":
+                placeTile = new WoodTile();
+                break;
+            case "FloorTile":
+                placeTile = new FloorTile();
+                break;
+            case "BarrelTile":
+                placeTile = new BarrelTile();
+                break;
+            case "BarsTile":
+                placeTile = new BarsTile();
+                break;
+            case "SBarTile":
+                placeTile = new SBarTile();
+                break;
+            case "WoodBarsTile":
+                placeTile = new WoodBarsTile();
+                break;
+
+        }
+        if (placeTile != null) {
+            tiles[(int) (x / 32)][(int) (y / 32)] = placeTile;
+        }
     }
 
     @Override
@@ -249,5 +331,45 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     public void mouseExited(MouseEvent e) {
         // TODO Auto-generated method stub
 
+    }
+
+    public void mouseDragged(MouseEvent e) {
+        int x = e.getX();
+        int y = e.getY();
+        Tile curTile = tiles[(int) (x / 32)][(int) (y / 32)];
+
+        System.out.println("Placing " + menuTile.getName());
+
+        Tile placeTile = null;
+        switch (menuTile.getName()) {
+            case "GrassTile":
+                placeTile = new GrassTile();
+                break;
+            case "WallTile":
+                placeTile = new WallTile();
+                break;
+            case "WoodTile":
+                placeTile = new WoodTile();
+                break;
+            case "FloorTile":
+                placeTile = new FloorTile();
+                break;
+            case "BarrelTile":
+                placeTile = new BarrelTile();
+                break;
+            case "BarsTile":
+                placeTile = new BarsTile();
+                break;
+            case "SBarTile":
+                placeTile = new SBarTile();
+                break;
+            case "WoodBarsTile":
+                placeTile = new WoodBarsTile();
+                break;
+
+        }
+        if (placeTile != null) {
+            tiles[(int) (x / 32)][(int) (y / 32)] = placeTile;
+        }
     }
 }

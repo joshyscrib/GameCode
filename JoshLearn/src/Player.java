@@ -19,6 +19,8 @@ public class Player {
     boolean facingLeft = false;
     int attackTick = 0;
     private Image[] playerImages = new Image[4];
+    boolean hasKey = false;
+
 
     public Player() {
         URL img1 = getClass().getClassLoader().getResource("images/wolf-2.png");
@@ -55,7 +57,7 @@ public class Player {
         int attackX = x + 32 + 30;
         int attackY = y + 30;
         for(Mob curMob : mobs){
-            if(attackX >= curMob.x && attackX < curMob.x + 32 && attackY >= curMob.y && attackY < curMob.y + 64){
+            if((curMob.x >= x - 30 && curMob.x < x + 62 && curMob.y >= y - 30 && curMob.y < y + 64) || (curMob.x + 32 >= x - 30 && curMob.x + 32 < x + 62 && curMob.y >= y - 30 && curMob.y < y + 64) || (curMob.x >= x - 30 && curMob.x < x + 62 && curMob.y + 64 >= y - 30 && curMob.y + 64 < y + 64) || (curMob.x >= x + 32 - 30 && curMob.x + 32 < x + 62 && curMob.y + 64 >= y - 30 && curMob.y + 64 < y + 64) || (curMob.x >= x - 30 && curMob.x < x + 62 && curMob.y >= y - 30 && curMob.y < y + 64)){
                 System.out.println("hit!");
                 curMob.gotHit(atk);
             }

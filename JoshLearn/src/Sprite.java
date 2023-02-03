@@ -5,8 +5,8 @@ import java.util.Random;
 public class Sprite {
     int hp = 10;
     int def = 0;
-    int x = 20;
-    int y = 20;
+    int x = 200;
+    int y = 200;
     int xSide = 32;
     int ySide = 64;
     int n = 4;
