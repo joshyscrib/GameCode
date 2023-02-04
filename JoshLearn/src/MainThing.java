@@ -9,7 +9,7 @@ public class MainThing {
         Panel myPanel = new LevelOne();
         myFrame.add(myPanel);
         myFrame.setVisible(true);
-        myFrame.setSize(500,500);
+        myFrame.setSize(900,900);
         myFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 

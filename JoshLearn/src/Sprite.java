@@ -11,8 +11,13 @@ public class Sprite {
     int ySide = 64;
     int n = 4;
     int speed = 3;
+    int knockback = 10;
+    int nextKnockbackX = 0;
+    int nextKnockbackY = 0;
     Direction monsterDirection = Direction.Right;
     Random r = new Random();
+    int tickCount = 0;
+    int lastHitTick = -1000;
     public void paint(Graphics g) {
         Graphics2D context = (Graphics2D) g;
         context.setColor(Color.PINK);
@@ -38,8 +43,18 @@ public class Sprite {
         return true;
         }
     } 
+    protected void tick(){
 
+    }
     public void tick(Tile[][] tiles, Player dude, ArrayList<Mob> mobs) {
+        tickCount++;
+        tick();
+        if(nextKnockbackX > 0){
+            if(canMoveSprite(nextKnockbackX, y, tiles)){
+                x = nextKnockbackX;
+            }
+            nextKnockbackX = 0;
+        }
         switch (monsterDirection) {
             case Up:
             if(canMoveSprite(x, y - speed, tiles)){
@@ -150,11 +165,21 @@ public class Sprite {
         }
         
     }
-    public void gotHit(int dmg){
+    public void gotHit(int dmg, Direction attackDirection){
         hp -= (dmg - def);
         System.out.println("hitPoints: " + hp);
         if(hp <= 0){
             System.out.println("IM DEAD ):");
+        }
+
+        lastHitTick = tickCount;
+        switch(attackDirection){
+            case Right:        
+                nextKnockbackX = x+knockback;
+            break;
+            case Left:
+                nextKnockbackX = x - knockback;
+            break;
         }
     }
     public boolean isDead(){

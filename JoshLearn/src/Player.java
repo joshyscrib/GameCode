@@ -11,7 +11,7 @@ public class Player {
     int tickCount = 0;
     private int animationIndex = 0;
     int hp = 100;
-    int atk = 3;
+    int atk = 8;
     int def = 0;
     boolean isMoving = false;
     Item[] inventory;
@@ -20,6 +20,7 @@ public class Player {
     int attackTick = 0;
     private Image[] playerImages = new Image[4];
     boolean hasKey = false;
+    int lastAttackTick = 0;
 
 
     public Player() {
@@ -53,13 +54,17 @@ public class Player {
     }
 
     public void attack(ArrayList<Mob> mobs, int x, int y) {
+        if(Math.abs(tickCount) - lastAttackTick <= 10){
+            return;
+        }
+        lastAttackTick = tickCount;
         isAttacking = true;
-        int attackX = x + 32 + 30;
-        int attackY = y + 30;
+    //   int attackX = x + 32 + 30;
+    //  int attackY = y + 30;
         for(Mob curMob : mobs){
             if((curMob.x >= x - 30 && curMob.x < x + 62 && curMob.y >= y - 30 && curMob.y < y + 64) || (curMob.x + 32 >= x - 30 && curMob.x + 32 < x + 62 && curMob.y >= y - 30 && curMob.y < y + 64) || (curMob.x >= x - 30 && curMob.x < x + 62 && curMob.y + 64 >= y - 30 && curMob.y + 64 < y + 64) || (curMob.x >= x + 32 - 30 && curMob.x + 32 < x + 62 && curMob.y + 64 >= y - 30 && curMob.y + 64 < y + 64) || (curMob.x >= x - 30 && curMob.x < x + 62 && curMob.y >= y - 30 && curMob.y < y + 64)){
                 System.out.println("hit!");
-                curMob.gotHit(atk);
+                curMob.gotHit(atk, this.playerDirection);
             }
         }
     }

@@ -200,7 +200,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     public void mouseClicked(MouseEvent e) {
         int x = e.getX();
         int y = e.getY();
-        Tile curTile = tiles[(int) (x / 32)][(int) (y / 32)];
+        //Tile curTile = tiles[(int) (x / 32)][(int) (y / 32)];
 
         System.out.println("Placing " + menuTile.getName());
 
@@ -242,7 +242,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         // TODO Auto-generated method stub
         int x = e.getX();
         int y = e.getY();
-        Tile curTile = tiles[(int) (x / 32)][(int) (y / 32)];
+        //Tile curTile = tiles[(int) (x / 32)][(int) (y / 32)];
 
         System.out.println("Placing " + menuTile.getName());
 
@@ -284,7 +284,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         // TODO Auto-generated method stub
         int x = e.getX();
         int y = e.getY();
-        Tile curTile = tiles[(int) (x / 32)][(int) (y / 32)];
+        //ile curTile = tiles[(int) (x / 32)][(int) (y / 32)];
 
         System.out.println("Placing " + menuTile.getName());
 
@@ -336,7 +336,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     public void mouseDragged(MouseEvent e) {
         int x = e.getX();
         int y = e.getY();
-        Tile curTile = tiles[(int) (x / 32)][(int) (y / 32)];
+        //Tile curTile = tiles[(int) (x / 32)][(int) (y / 32)];
 
         System.out.println("Placing " + menuTile.getName());
 
