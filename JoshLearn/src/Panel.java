@@ -26,7 +26,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         menuTile = c;
     }
 
-    public void init() {
+    public void init() { 
 
         for (int i = 0; i < xTiles; i++) {
             for (int j = 0; j < yTiles; j++) {
@@ -78,6 +78,10 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     public void paint(Graphics g) {
         Graphics2D context = (Graphics2D) g;
         tiles[0][0].drawTile(context, 0, 0);
+        context.setColor(Color.BLACK);
+        context.fillRect(5, 715, 215, 51);
+        context.setColor(Color.GREEN);
+        context.fillRect(13,723,dude.hp * 2, 37);
     }
 
     double speed = 10;
@@ -168,7 +172,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         if (listener.downing) {
             dude.playerDirection = Direction.Down;
         }
-
+        
     }
 
     int placeX = 200;
