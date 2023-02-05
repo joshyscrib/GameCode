@@ -33,12 +33,9 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                 tiles[i][j] = new FloorTile();
             }
         }
-        for (int i = 0; i < 10; i++) {
-            Guard guard = new Guard();
-            mobs.add(guard);
-        }
         addMouseListener(this);
         load("LevelOne.game");
+
     }
 
     public void save(String place) {
@@ -67,6 +64,14 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             System.out.println("EXception " + e);
         }
         System.out.println("We are loading!!!!");
+        for (int i = 0; i < xTiles; i++) {
+            for (int j = 0; j < yTiles; j++) {
+                if (tiles[i][j].getClass() == SpawnTile.class) {
+                    Guard guard = new Guard(i * 32, j * 32);
+                    mobs.add(guard);
+                }
+            }
+        }
     }
 
     @Override
@@ -200,7 +205,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     public void mouseClicked(MouseEvent e) {
         int x = e.getX();
         int y = e.getY();
-        //Tile curTile = tiles[(int) (x / 32)][(int) (y / 32)];
+        // Tile curTile = tiles[(int) (x / 32)][(int) (y / 32)];
 
         System.out.println("Placing " + menuTile.getName());
 
@@ -230,6 +235,9 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             case "WoodBarsTile":
                 placeTile = new WoodBarsTile();
                 break;
+            case "SpawnTile":
+                placeTile = new SpawnTile();
+                break;
 
         }
         if (placeTile != null) {
@@ -242,7 +250,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         // TODO Auto-generated method stub
         int x = e.getX();
         int y = e.getY();
-        //Tile curTile = tiles[(int) (x / 32)][(int) (y / 32)];
+        // Tile curTile = tiles[(int) (x / 32)][(int) (y / 32)];
 
         System.out.println("Placing " + menuTile.getName());
 
@@ -284,7 +292,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         // TODO Auto-generated method stub
         int x = e.getX();
         int y = e.getY();
-        //ile curTile = tiles[(int) (x / 32)][(int) (y / 32)];
+        // ile curTile = tiles[(int) (x / 32)][(int) (y / 32)];
 
         System.out.println("Placing " + menuTile.getName());
 
@@ -336,7 +344,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     public void mouseDragged(MouseEvent e) {
         int x = e.getX();
         int y = e.getY();
-        //Tile curTile = tiles[(int) (x / 32)][(int) (y / 32)];
+        // Tile curTile = tiles[(int) (x / 32)][(int) (y / 32)];
 
         System.out.println("Placing " + menuTile.getName());
 

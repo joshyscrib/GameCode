@@ -10,7 +10,7 @@ public class Guard extends Mob {
     int guardWidth = 64;
     int tickCount = 0;
     int animationIndex = 0;
-    public Guard() {
+    public Guard(int pX, int pY) {
         URL img1 = getClass().getClassLoader().getResource("images/guard-1.png");
         URL img2 = getClass().getClassLoader().getResource("images/guard-2.png");
         try {
@@ -20,6 +20,8 @@ public class Guard extends Mob {
         }
 
         hp = startingHp;
+        x = pX;
+        y = pY;
     }
     @Override
     public void paint(Graphics g) {
@@ -50,7 +52,7 @@ public class Guard extends Mob {
     
         context.drawRect(x+10,y-10,50,8);
 
-        Color healthColor = new Color(0,255, 0, 80);
+        Color healthColor = new Color(0,255, 0, 90);
 
         double maxHealthWidth = 48;
         double healthPercent = (double)hp/(double)startingHp;

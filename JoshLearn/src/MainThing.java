@@ -84,9 +84,9 @@ public class MainThing {
         MenuItem WoodBarsItem = new MenuItem("Wood Bars");
         main.add(WoodBarsItem);
         WoodBarsItem.addActionListener(action -> myPanel.setMenuTile(WoodBarsTile.class));
-        MenuItem GuardItem = new MenuItem("Yellow Guard");
-        main.add(GuardItem);
-        GuardItem.addActionListener(action -> myPanel.setMenuTile(WoodBarsTile.class));
+        MenuItem SpawnItem = new MenuItem("Spawner");
+        main.add(SpawnItem);
+        SpawnItem.addActionListener(action -> myPanel.setMenuTile(SpawnTile.class));
 
         
 
