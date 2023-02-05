@@ -1,7 +1,7 @@
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 import java.awt.*;
-
+// hello test yay
 public class MainThing {
     public static void main(String[] args){
         // Creates frame and panel
