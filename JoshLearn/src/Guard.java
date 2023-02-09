@@ -62,7 +62,6 @@ public class Guard extends Mob {
     }
     @Override
     public void tick() {
-
         tickCount++;
         if (tickCount % 4 == 0) {
             animationIndex++;

@@ -113,6 +113,14 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         return true;
     }
 
+    public boolean playerTakeDamage(int x, int y){
+        if(x >= placeX - 2 && x <= placeX + 32 + 2 && y >= placeY - 3  && y <= placeY || x + 32 >= placeX - 2 && x + 32 <= placeX + 32 + 2 && y >= placeY - 3  && y <= placeY || x >= placeX - 2 && x <= placeX + 32 + 2 && y + 64 >= placeY - 3  && y + 64 <= placeY || x + 32>= placeX - 2 && x + 32<= placeX + 32 + 2 && y + 64 >= placeY - 3  && y + 64 <= placeY){
+            return true;
+        }
+        return false;
+
+    }
+
     public void tick() {
         if (listener.attacking) {
             dude.attack(mobs, placeX, placeY);
@@ -120,6 +128,9 @@ public class Panel extends JPanel implements Runnable, MouseListener {
 
         for (int i = mobs.size() - 1; i >= 0; i--) {
             Mob curMob = mobs.get(i);
+            if(playerTakeDamage(curMob.x,curMob.y)){
+                dude.hp -= 20;
+            }
             curMob.tick(tiles, dude, mobs);
             if (curMob.isDead()) {
                 mobs.remove(i);
