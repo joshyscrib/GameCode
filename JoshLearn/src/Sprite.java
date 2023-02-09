@@ -10,7 +10,7 @@ public class Sprite {
     int xSide = 32;
     int ySide = 64;
     int n = 4;
-    int speed = 3;
+    int speed = 1;
     int knockback = 15;
     int nextKnockbackX = 0;
     int nextKnockbackY = 0;

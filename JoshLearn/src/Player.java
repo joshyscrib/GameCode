@@ -101,5 +101,7 @@ public class Player {
                 break;
         }
         }
+        context.setColor(Color.white);
+        context.drawRect(x,y,32,64);
     }
 }

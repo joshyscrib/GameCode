@@ -59,6 +59,8 @@ public class Guard extends Mob {
         maxHealthWidth *= healthPercent;
         context.setColor(healthColor);
         context.fillRect(x+11,y-9,(int)maxHealthWidth,6);
+        context.setColor(Color.RED);
+        context.drawRect(x, y, 32, 64);
     }
     @Override
     public void tick() {

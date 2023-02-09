@@ -1,3 +1,4 @@
+import javax.naming.Context;
 import javax.swing.JPanel;
 import java.awt.*;
 import java.util.ArrayList;
@@ -77,11 +78,20 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     @Override
     public void paint(Graphics g) {
         Graphics2D context = (Graphics2D) g;
+
+        
+        
         tiles[0][0].drawTile(context, 0, 0);
         context.setColor(Color.BLACK);
         context.fillRect(5, 715, 215, 51);
         context.setColor(Color.GREEN);
+        if(dude.hp >= 0){
         context.fillRect(13,723,dude.hp * 2, 37);
+        }
+        for(int i = 0; i < mobs.size(); i++){
+            context.setColor(Color.RED);
+            context.fillRect(mobs.get(i).x,mobs.get(i).y,32,64);
+        }
     }
 
     double speed = 10;
@@ -113,8 +123,17 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         return true;
     }
 
+    public boolean isPointInPlayer(int x, int y){
+        if(x >= placeX - 2 && x <= placeX + 32 + 2 && y >= placeY - 3  && y <= placeY+ 64)
+        {
+            return true;
+        }
+
+        return false;
+    }
     public boolean playerTakeDamage(int x, int y){
-        if(x >= placeX - 2 && x <= placeX + 32 + 2 && y >= placeY - 3  && y <= placeY || x + 32 >= placeX - 2 && x + 32 <= placeX + 32 + 2 && y >= placeY - 3  && y <= placeY || x >= placeX - 2 && x <= placeX + 32 + 2 && y + 64 >= placeY - 3  && y + 64 <= placeY || x + 32>= placeX - 2 && x + 32<= placeX + 32 + 2 && y + 64 >= placeY - 3  && y + 64 <= placeY){
+        if(isPointInPlayer(x,y) || isPointInPlayer(x+32, y) || isPointInPlayer(x, y + 64) || isPointInPlayer(x + 32, y + 64)){
+            System.out.println("Player Hit!!!");
             return true;
         }
         return false;
@@ -131,6 +150,25 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             if(playerTakeDamage(curMob.x,curMob.y)){
                 dude.hp -= 20;
             }
+            if(playerTakeDamage(curMob.x, curMob.y)){switch(curMob.monsterDirection){
+                
+                case Up:
+                placeY -= 8;
+                curMob.y += 8;
+                break;
+                case Left:
+                placeX -= 8;
+                curMob.x += 8;
+                break;
+                case Down:
+                placeY += 8;
+                curMob.y -= 8;
+                break;
+                case Right:
+                placeX += 8;
+                curMob.x -= 8;
+                break;
+            }}
             curMob.tick(tiles, dude, mobs);
             if (curMob.isDead()) {
                 mobs.remove(i);
@@ -188,7 +226,6 @@ public class Panel extends JPanel implements Runnable, MouseListener {
 
     int placeX = 200;
     int placeY = 200;
-
     @Override
     public void run() {
         while (true) {
