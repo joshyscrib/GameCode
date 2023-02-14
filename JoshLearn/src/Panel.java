@@ -1,4 +1,8 @@
 import javax.naming.Context;
+import javax.print.DocFlavor.URL;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.JPanel;
 import java.awt.*;
 import java.util.ArrayList;
@@ -9,8 +13,15 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+
 
 public class Panel extends JPanel implements Runnable, MouseListener {
+    private String filename;
+    private Player player; 
+    private Clip clip;
+
     GameKeyListener listener = new GameKeyListener(this);
     public static int xTiles = 22;
     public static int yTiles = 22;
@@ -28,7 +39,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     }
 
     public void init() { 
-
+        play();
         for (int i = 0; i < xTiles; i++) {
             for (int j = 0; j < yTiles; j++) {
                 tiles[i][j] = new FloorTile();
@@ -150,7 +161,8 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             if(playerTakeDamage(curMob.x,curMob.y)){
                 dude.hp -= 20;
             }
-            if(playerTakeDamage(curMob.x, curMob.y)){switch(curMob.monsterDirection){
+            if(playerTakeDamage(curMob.x, curMob.y)){
+              /*  switch(curMob.monsterDirection){
                 
                 case Up:
                 placeY -= 8;
@@ -168,7 +180,9 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                 placeX += 8;
                 curMob.x -= 8;
                 break;
-            }}
+            }
+            */
+        }
             curMob.tick(tiles, dude, mobs);
             if (curMob.isDead()) {
                 mobs.remove(i);
@@ -247,12 +261,29 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         System.out.println(code);
     }
 
-    public Panel() {
+    public Panel(String filename) {
         this.addKeyListener(listener);
         this.setFocusable(true);
         this.init();
+        this.filename = filename;
     }
+    public void play() {
+        try {   
+            if(clip == null){
+                java.net.URL url = this.getClass().getResource("images/dungeonMusic.wav");
+                AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(url);
+                // Get a clip resource.
+                clip = AudioSystem.getClip();
+                clip.open(audioInputStream);
+            }
 
+            clip.start();
+        }
+        catch (Exception e) {
+       
+            System.out.println(e);
+        }
+    }
     @Override
     public void mouseClicked(MouseEvent e) {
         int x = e.getX();

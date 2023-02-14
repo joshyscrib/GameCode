@@ -1,16 +1,51 @@
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 import java.awt.*;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import javax.sound.sampled.*;
+import java.net.URL;
 // hello test yay
+
 public class MainThing {
+
+    private String filename;
+    private Player player; 
+    private Clip clip;
+
+    public MainThing(String fileName){
+        this.filename = filename;
+    }
+
+    public void play() {
+        try {   
+            if(clip == null){
+                URL url = this.getClass().getResource("images/dungeonMusic.mp3");
+                AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(url);
+                // Get a clip resource.
+                clip = AudioSystem.getClip();
+                clip.open(audioInputStream);
+            }
+
+            clip.start();
+        }
+        catch (Exception e) {
+       
+            System.out.println(e);
+        }
+    }
+
     public static void main(String[] args){
+        
         // Creates frame and panel
         JFrame myFrame = new JFrame("game");
-        Panel myPanel = new LevelOne();
+        Panel myPanel = new LevelOne("images/dungeonMusic.mp3");
         myFrame.add(myPanel);
         myFrame.setVisible(true);
         myFrame.setSize(900,900);
         myFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+        
 
 
         // Makes menu

@@ -1,5 +1,10 @@
 import java.awt.*;
 public class LevelOne extends Panel{
+    public LevelOne(String filename) {
+        super(filename);
+        //TODO Auto-generated constructor stub
+    }
+
     @Override
     public void paint(Graphics g){
         Graphics2D context = (Graphics2D) g;
