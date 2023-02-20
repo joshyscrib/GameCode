@@ -38,7 +38,7 @@ public class Player {
 
     public void tick() {
         tickCount++;
-        if (tickCount % 6 == 0) {
+        if (tickCount % 9 == 0) {
             animationIndex++;
             if (animationIndex >= playerImages.length) {
                 animationIndex = 0;
@@ -101,7 +101,5 @@ public class Player {
                 break;
         }
         }
-        context.setColor(Color.white);
-        context.drawRect(x,y,32,64);
     }
 }

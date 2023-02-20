@@ -105,7 +105,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         }
     }
 
-    double speed = 10;
+    double speed = 4;
 
     public void clearAll() {
         for (int i = 0; i < tiles.length; i++) {

@@ -1,3 +1,4 @@
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 import java.awt.*;
@@ -44,7 +45,9 @@ public class MainThing {
         myFrame.setVisible(true);
         myFrame.setSize(900,900);
         myFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
+        
+        ImageIcon img = new ImageIcon("images/wolf-2.png");
+        myFrame.setIconImage(img.getImage());
         
 
 
