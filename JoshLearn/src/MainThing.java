@@ -26,9 +26,10 @@ public class MainThing {
                 // Get a clip resource.
                 clip = AudioSystem.getClip();
                 clip.open(audioInputStream);
+                clip.loop(5);
             }
 
-            clip.start();
+          //  clip.loop(1);
         }
         catch (Exception e) {
        
@@ -45,7 +46,7 @@ public class MainThing {
         myFrame.setVisible(true);
         myFrame.setSize(900,900);
         myFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        
+
         ImageIcon img = new ImageIcon("images/wolf-2.png");
         myFrame.setIconImage(img.getImage());
         
@@ -84,10 +85,15 @@ public class MainThing {
         SaveItem5.addActionListener(action -> myPanel.save("LevelFive.game"));
 
         LoadItem1.addActionListener(action -> myPanel.load("LevelOne.game"));
+        LoadItem1.addActionListener(action -> myPanel.curLevel = 1);
         LoadItem2.addActionListener(action -> myPanel.load("LevelTwo.game"));
+        LoadItem2.addActionListener(action -> myPanel.curLevel = 2);
         LoadItem3.addActionListener(action -> myPanel.load("LevelThree.game"));
+        LoadItem3.addActionListener(action -> myPanel.curLevel = 3);
         LoadItem4.addActionListener(action -> myPanel.load("LevelFour.game"));
+        LoadItem4.addActionListener(action -> myPanel.curLevel = 4);
         LoadItem5.addActionListener(action -> myPanel.load("LevelFive.game"));
+        LoadItem5.addActionListener(action -> myPanel.curLevel = 5);
         Menu main = new Menu("Tiles");
         bar.add(file);
         
@@ -125,6 +131,9 @@ public class MainThing {
         MenuItem SpawnItem = new MenuItem("Spawner");
         main.add(SpawnItem);
         SpawnItem.addActionListener(action -> myPanel.setMenuTile(SpawnTile.class));
+        MenuItem TransItem = new MenuItem("Transition");
+        main.add(TransItem);
+        TransItem.addActionListener(action -> myPanel.setMenuTile(TransitionTile.class));
 
         
 

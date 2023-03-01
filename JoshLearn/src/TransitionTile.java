@@ -9,8 +9,6 @@ public class TransitionTile extends Tile{
     public void drawTile(Graphics2D context, int x, int y){
         super.drawTile(context, x, y);
         context.drawImage(image, x, y, null);
-    }
-    public TransitionTile(){
         if(image == null){
         URL img = getClass().getClassLoader().getResource("images/barsTile.png");
         try{
@@ -21,6 +19,9 @@ public class TransitionTile extends Tile{
             System.out.println("EXCEPTION ):  " + ex);
         }
     }
+    }
+    public TransitionTile(){
+        
         
     } 
 }

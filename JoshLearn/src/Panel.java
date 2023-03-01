@@ -16,10 +16,9 @@ import java.io.ObjectOutputStream;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 
-
 public class Panel extends JPanel implements Runnable, MouseListener {
     private String filename;
-    private Player player; 
+    private Player player;
     private Clip clip;
 
     GameKeyListener listener = new GameKeyListener(this);
@@ -32,13 +31,14 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     double mouseY = location.getY();
     Class menuTile = FloorTile.class;
     ArrayList<Mob> mobs = new ArrayList<Mob>();
+    int curLevel = 1;
 
     // here is a comment
     public void setMenuTile(Class c) {
         menuTile = c;
     }
 
-    public void init() { 
+    public void init() {
         play();
         for (int i = 0; i < xTiles; i++) {
             for (int j = 0; j < yTiles; j++) {
@@ -82,6 +82,8 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                     Guard guard = new Guard(i * 32, j * 32);
                     mobs.add(guard);
                 }
+
+
             }
         }
     }
@@ -90,18 +92,16 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     public void paint(Graphics g) {
         Graphics2D context = (Graphics2D) g;
 
-        
-        
         tiles[0][0].drawTile(context, 0, 0);
         context.setColor(Color.BLACK);
         context.fillRect(5, 715, 215, 51);
         context.setColor(Color.GREEN);
-        if(dude.hp >= 0){
-        context.fillRect(13,723,dude.hp * 2, 37);
+        if (dude.hp >= 0) {
+            context.fillRect(13, 723, dude.hp * 2, 37);
         }
-        for(int i = 0; i < mobs.size(); i++){
+        for (int i = 0; i < mobs.size(); i++) {
             context.setColor(Color.RED);
-            context.fillRect(mobs.get(i).x,mobs.get(i).y,32,64);
+            context.fillRect(mobs.get(i).x, mobs.get(i).y, 32, 64);
         }
     }
 
@@ -126,7 +126,25 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             return false;
         }
     }
-
+    public void loadNext(int level){
+        switch(curLevel){
+            case 1:
+            load("LevelTwo.game");
+            break;
+            case 2:
+            load("LevelThree.game");
+            break;
+            case 3:
+            load("LevelFour.game");
+            break;
+            case 4:
+            load("LevelFive.game");
+            break;
+            case 5:
+            load("LevelOne.game");
+            break;
+        }
+    }
     public boolean doesPointCollide(int X, int Y) {
         if (X < 0 || X > 703 || Y < 0 || Y > 703 || tiles[(int) Math.floor(X / 32)][(int) Math.floor(Y / 32)].solid) {
             return false;
@@ -134,16 +152,17 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         return true;
     }
 
-    public boolean isPointInPlayer(int x, int y){
-        if(x >= placeX - 2 && x <= placeX + 32 + 2 && y >= placeY - 3  && y <= placeY+ 64)
-        {
+    public boolean isPointInPlayer(int x, int y) {
+        if (x >= placeX - 2 && x <= placeX + 32 + 2 && y >= placeY - 3 && y <= placeY + 64) {
             return true;
         }
 
         return false;
     }
-    public boolean playerTakeDamage(int x, int y){
-        if(isPointInPlayer(x,y) || isPointInPlayer(x+32, y) || isPointInPlayer(x, y + 64) || isPointInPlayer(x + 32, y + 64)){
+
+    public boolean playerTakeDamage(int x, int y) {
+        if (isPointInPlayer(x, y) || isPointInPlayer(x + 32, y) || isPointInPlayer(x, y + 64)
+                || isPointInPlayer(x + 32, y + 64)) {
             System.out.println("Player Hit!!!");
             return true;
         }
@@ -158,31 +177,32 @@ public class Panel extends JPanel implements Runnable, MouseListener {
 
         for (int i = mobs.size() - 1; i >= 0; i--) {
             Mob curMob = mobs.get(i);
-            if(playerTakeDamage(curMob.x,curMob.y)){
+            if (playerTakeDamage(curMob.x, curMob.y)) {
                 dude.hp -= 20;
             }
-            if(playerTakeDamage(curMob.x, curMob.y)){
-              /*  switch(curMob.monsterDirection){
-                
-                case Up:
-                placeY -= 8;
-                curMob.y += 8;
-                break;
-                case Left:
-                placeX -= 8;
-                curMob.x += 8;
-                break;
-                case Down:
-                placeY += 8;
-                curMob.y -= 8;
-                break;
-                case Right:
-                placeX += 8;
-                curMob.x -= 8;
-                break;
+            if (playerTakeDamage(curMob.x, curMob.y)) {
+                /*
+                 * switch(curMob.monsterDirection){
+                 * 
+                 * case Up:
+                 * placeY -= 8;
+                 * curMob.y += 8;
+                 * break;
+                 * case Left:
+                 * placeX -= 8;
+                 * curMob.x += 8;
+                 * break;
+                 * case Down:
+                 * placeY += 8;
+                 * curMob.y -= 8;
+                 * break;
+                 * case Right:
+                 * placeX += 8;
+                 * curMob.x -= 8;
+                 * break;
+                 * }
+                 */
             }
-            */
-        }
             curMob.tick(tiles, dude, mobs);
             if (curMob.isDead()) {
                 mobs.remove(i);
@@ -197,6 +217,11 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         for (int x = 0; x < xTiles; x++) {
             for (int y = 0; y < yTiles; y++) {
                 tiles[x][y].tick();
+                
+                if((isPointInPlayer(x * 32, y * 32) || isPointInPlayer(x * 32 + 32, y * 32) || isPointInPlayer(x * 32, y * 32 + 32) || isPointInPlayer(x * 32+ 32, y * 32+ 32)) && tiles[x][y].getClass() == TransitionTile.class){
+                    loadNext(curLevel);
+                }
+
             }
         }
         int targetX = placeX;
@@ -235,11 +260,12 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         if (listener.downing) {
             dude.playerDirection = Direction.Down;
         }
-        
+
     }
 
     int placeX = 200;
     int placeY = 200;
+
     @Override
     public void run() {
         while (true) {
@@ -267,9 +293,10 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         this.init();
         this.filename = filename;
     }
+
     public void play() {
-        try {   
-            if(clip == null){
+        try {
+            if (clip == null) {
                 java.net.URL url = this.getClass().getResource("images/dungeonMusic.wav");
                 AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(url);
                 // Get a clip resource.
@@ -278,12 +305,12 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             }
 
             clip.start();
-        }
-        catch (Exception e) {
-       
+        } catch (Exception e) {
+
             System.out.println(e);
         }
     }
+
     @Override
     public void mouseClicked(MouseEvent e) {
         int x = e.getX();
@@ -320,6 +347,9 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                 break;
             case "SpawnTile":
                 placeTile = new SpawnTile();
+                break;
+            case "TransitionTile":
+                placeTile = new TransitionTile();
                 break;
 
         }
@@ -363,6 +393,11 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             case "WoodBarsTile":
                 placeTile = new WoodBarsTile();
                 break;
+            case "SpawnTile":
+                placeTile = new SpawnTile();
+                break;
+            case "TransitionTile":
+                placeTile = new TransitionTile();
 
         }
         if (placeTile != null) {
@@ -405,6 +440,11 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             case "WoodBarsTile":
                 placeTile = new WoodBarsTile();
                 break;
+            case "SpawnTile":
+                placeTile = new SpawnTile();
+                break;
+            case "TransitionTile":
+                placeTile = new TransitionTile();
 
         }
         if (placeTile != null) {
@@ -457,6 +497,11 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             case "WoodBarsTile":
                 placeTile = new WoodBarsTile();
                 break;
+            case "SpawnTile":
+                placeTile = new SpawnTile();
+                break;
+            case "TransitionTile":
+                placeTile = new TransitionTile();
 
         }
         if (placeTile != null) {
