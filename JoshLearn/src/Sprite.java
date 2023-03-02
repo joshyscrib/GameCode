@@ -24,7 +24,9 @@ public class Sprite {
         context.setColor(Color.PINK);
         context.fillRect(x, y, xSide, ySide);
     }
-
+    public Sprite(int s){
+        speed = s;
+    }
     public boolean canMoveSprite(int X, int Y, Tile[][] tiles) {
         if (doesPointCollide(X, Y, tiles) && doesPointCollide(X + 40, Y, tiles) && doesPointCollide(X, Y + 63, tiles)
                 && doesPointCollide(X + 40, Y + 64, tiles) && X > 0 && X < 672 && Y > 0 && Y < 672

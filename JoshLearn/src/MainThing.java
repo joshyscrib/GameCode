@@ -134,6 +134,9 @@ public class MainThing {
         MenuItem TransItem = new MenuItem("Transition");
         main.add(TransItem);
         TransItem.addActionListener(action -> myPanel.setMenuTile(TransitionTile.class));
+        MenuItem PSpawnItem = new MenuItem("Princess");
+        main.add(PSpawnItem);
+        PSpawnItem.addActionListener(action -> myPanel.setMenuTile(PSpawnTile.class));
 
         
 

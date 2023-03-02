@@ -11,6 +11,7 @@ public class Guard extends Mob {
     int tickCount = 0;
     int animationIndex = 0;
     public Guard(int pX, int pY) {
+        super(1);
         URL img1 = getClass().getClassLoader().getResource("images/guard-1.png");
         URL img2 = getClass().getClassLoader().getResource("images/guard-2.png");
         try {

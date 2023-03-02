@@ -82,7 +82,10 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                     Guard guard = new Guard(i * 32, j * 32);
                     mobs.add(guard);
                 }
-
+                if (tiles[i][j].getClass() == PSpawnTile.class) {
+                    Princess princess = new Princess(i * 32, j * 32);
+                    mobs.add(princess);
+                }
 
             }
         }
@@ -126,25 +129,27 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             return false;
         }
     }
-    public void loadNext(int level){
-        switch(curLevel){
+
+    public void loadNext(int level) {
+        switch (curLevel) {
             case 1:
-            load("LevelTwo.game");
-            break;
+                load("LevelTwo.game");
+                break;
             case 2:
-            load("LevelThree.game");
-            break;
+                load("LevelThree.game");
+                break;
             case 3:
-            load("LevelFour.game");
-            break;
+                load("LevelFour.game");
+                break;
             case 4:
-            load("LevelFive.game");
-            break;
+                load("LevelFive.game");
+                break;
             case 5:
-            load("LevelOne.game");
-            break;
+                load("LevelOne.game");
+                break;
         }
     }
+
     public boolean doesPointCollide(int X, int Y) {
         if (X < 0 || X > 703 || Y < 0 || Y > 703 || tiles[(int) Math.floor(X / 32)][(int) Math.floor(Y / 32)].solid) {
             return false;
@@ -217,8 +222,10 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         for (int x = 0; x < xTiles; x++) {
             for (int y = 0; y < yTiles; y++) {
                 tiles[x][y].tick();
-                
-                if((isPointInPlayer(x * 32, y * 32) || isPointInPlayer(x * 32 + 32, y * 32) || isPointInPlayer(x * 32, y * 32 + 32) || isPointInPlayer(x * 32+ 32, y * 32+ 32)) && tiles[x][y].getClass() == TransitionTile.class){
+
+                if ((isPointInPlayer(x * 32, y * 32) || isPointInPlayer(x * 32 + 32, y * 32)
+                        || isPointInPlayer(x * 32, y * 32 + 32) || isPointInPlayer(x * 32 + 32, y * 32 + 32))
+                        && tiles[x][y].getClass() == TransitionTile.class) {
                     loadNext(curLevel);
                 }
 
@@ -348,6 +355,9 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             case "SpawnTile":
                 placeTile = new SpawnTile();
                 break;
+            case "PSpawnTile":
+                placeTile = new PSpawnTile();
+                break;
             case "TransitionTile":
                 placeTile = new TransitionTile();
                 break;
@@ -396,8 +406,12 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             case "SpawnTile":
                 placeTile = new SpawnTile();
                 break;
+            case "PSpawnTile":
+                placeTile = new PSpawnTile();
+                break;
             case "TransitionTile":
                 placeTile = new TransitionTile();
+                break;
 
         }
         if (placeTile != null) {
@@ -443,8 +457,12 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             case "SpawnTile":
                 placeTile = new SpawnTile();
                 break;
+            case "PSpawnTile":
+                placeTile = new PSpawnTile();
+                break;
             case "TransitionTile":
                 placeTile = new TransitionTile();
+                break;
 
         }
         if (placeTile != null) {
@@ -500,8 +518,12 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             case "SpawnTile":
                 placeTile = new SpawnTile();
                 break;
+            case "PSpawnTile":
+                placeTile = new PSpawnTile();
+                break;
             case "TransitionTile":
                 placeTile = new TransitionTile();
+                break;
 
         }
         if (placeTile != null) {
