@@ -131,6 +131,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     }
 
     public void loadNext(int level) {
+        mobs.clear();
         switch (curLevel) {
             case 1:
                 load("LevelTwo.game");
@@ -148,6 +149,11 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                 load("LevelOne.game");
                 break;
         }
+        curLevel++;
+        if(curLevel >= 6){
+            curLevel = 1;
+        }
+        
     }
 
     public boolean doesPointCollide(int X, int Y) {

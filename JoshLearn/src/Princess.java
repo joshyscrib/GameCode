@@ -5,7 +5,7 @@ import javax.imageio.ImageIO;
 
 public class Princess extends Mob {
 
-    static int startingHp = 50;
+    static int startingHp = 200;
     private Image[] princessImages = new Image[2];
     int princessWidth = 64;
     int tickCount = 0;
@@ -30,13 +30,13 @@ public class Princess extends Mob {
         //chooses how to draw image based on direction
         switch(monsterDirection){
             case Right:
-            context.drawImage(princessImages[animationIndex], x + 64, y, -64, 64, null);
+            context.drawImage(princessImages[animationIndex], x, y, 64, 64, null);
             break;
             case Left:
-            context.drawImage(princessImages[animationIndex], x, y, 64, 64, null);
+            context.drawImage(princessImages[animationIndex], x + 64, y, -64, 64, null);
             break;
             default:
-            context.drawImage(princessImages[animationIndex], x, y, 64, 64, null);
+            context.drawImage(princessImages[animationIndex], x  + 64, y, -64, 64, null);
             break;
         }
 
