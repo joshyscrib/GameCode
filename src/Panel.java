@@ -102,10 +102,6 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         if (dude.hp >= 0) {
             context.fillRect(13, 723, dude.hp * 2, 37);
         }
-        for (int i = 0; i < mobs.size(); i++) {
-            context.setColor(Color.RED);
-            context.fillRect(mobs.get(i).x, mobs.get(i).y, 32, 64);
-        }
     }
 
     double speed = 4;
@@ -150,10 +146,10 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                 break;
         }
         curLevel++;
-        if(curLevel >= 6){
+        if (curLevel >= 6) {
             curLevel = 1;
         }
-        
+
     }
 
     public boolean doesPointCollide(int X, int Y) {
@@ -181,7 +177,10 @@ public class Panel extends JPanel implements Runnable, MouseListener {
 
     }
 
+    int tickCount = 0;
+
     public void tick() {
+        tickCount++;
         if (listener.attacking) {
             dude.attack(mobs, placeX, placeY);
         }
@@ -273,7 +272,30 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         if (listener.downing) {
             dude.playerDirection = Direction.Down;
         }
+        for(int i = 0; i < mobs.size(); i++){
+            if(mobs.get(i).getClass() == Princess.class){
+            if(tickCount % 100 == 0){
+                  // finds distance between princess and player(to shoot a fireball)
+                  double dx = placeX - mobs.get(i).x;
+                  double dy = placeY-  mobs.get(i).y;
+                  double hyp = Math.sqrt(dx*dx + dy*dy);
+                  double angrad = Math.atan2(dy, dx);
+               //   angrad += Math.PI/2.0;
+                  double ang = Math.toDegrees(angrad);
+                  System.out.println(ang);
+                  if(ang < 0)
+                  {   
+                    ang += 360;
+                  }
+            Fireball fireball = new Fireball(1, Direction.Left, mobs, ang);
+            fireball.x = mobs.get(i).x;
+            fireball.y = mobs.get(i).y;
 
+            mobs.add(fireball);
+        } 
+            }
+        }
+        
     }
 
     int placeX = 200;
@@ -536,4 +558,5 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             tiles[(int) (x / 32)][(int) (y / 32)] = placeTile;
         }
     }
+
 }

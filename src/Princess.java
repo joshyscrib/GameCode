@@ -70,6 +70,5 @@ public class Princess extends Mob {
                 animationIndex = 0;
             }
         }
-
     }
 }

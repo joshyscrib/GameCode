@@ -21,8 +21,6 @@ public class Sprite {
 
     public void paint(Graphics g) {
         Graphics2D context = (Graphics2D) g;
-        context.setColor(Color.PINK);
-        context.fillRect(x, y, xSide, ySide);
     }
     public Sprite(int s){
         speed = s;
