@@ -291,7 +291,9 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             fireball.x = mobs.get(i).x;
             fireball.y = mobs.get(i).y;
 
+            if(hyp > 150){
             mobs.add(fireball);
+            }
         } 
             }
         }
