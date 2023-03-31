@@ -180,6 +180,9 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     int tickCount = 0;
 
     public void tick() {
+        if(dude.hp <= 0){
+            dude = null;
+        }
         tickCount++;
         if (listener.attacking) {
             dude.attack(mobs, placeX, placeY);
@@ -187,31 +190,15 @@ public class Panel extends JPanel implements Runnable, MouseListener {
 
         for (int i = mobs.size() - 1; i >= 0; i--) {
             Mob curMob = mobs.get(i);
+            
             if (playerTakeDamage(curMob.x, curMob.y)) {
                 dude.hp -= 20;
+                if(curMob.getClass() == Fireball.class){
+                mobs.remove(i);
+                dude.hp += 20;
+                dude.hp /= 2;
+                dude.hp -= 10;
             }
-            if (playerTakeDamage(curMob.x, curMob.y)) {
-                /*
-                 * switch(curMob.monsterDirection){
-                 * 
-                 * case Up:
-                 * placeY -= 8;
-                 * curMob.y += 8;
-                 * break;
-                 * case Left:
-                 * placeX -= 8;
-                 * curMob.x += 8;
-                 * break;
-                 * case Down:
-                 * placeY += 8;
-                 * curMob.y -= 8;
-                 * break;
-                 * case Right:
-                 * placeX += 8;
-                 * curMob.x -= 8;
-                 * break;
-                 * }
-                 */
             }
             curMob.tick(tiles, dude, mobs);
             if (curMob.isDead()) {
