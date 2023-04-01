@@ -6,6 +6,7 @@ import javax.sound.sampled.Clip;
 import javax.swing.JPanel;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Observer;
 import java.util.Random;
 import java.awt.event.*;
 import java.io.File;
@@ -20,6 +21,8 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     private String filename;
     private Player player;
     private Clip clip;
+
+    CutSceneModal modal = new CutSceneModal();
 
     GameKeyListener listener = new GameKeyListener(this);
     public static int xTiles = 22;
@@ -37,9 +40,11 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     public void setMenuTile(Class c) {
         menuTile = c;
     }
-
+    public void giveKey(){
+        dude.hasKey = true;
+    }
     public void init() {
-        play();
+        play("images/dungeonMusic.wav");
         for (int i = 0; i < xTiles; i++) {
             for (int j = 0; j < yTiles; j++) {
                 tiles[i][j] = new FloorTile();
@@ -90,17 +95,28 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             }
         }
     }
-
     @Override
     public void paint(Graphics g) {
         Graphics2D context = (Graphics2D) g;
 
-        tiles[0][0].drawTile(context, 0, 0);
+        if(dude.hp > 0){
+            tiles[0][0].drawTile(context, 0, 0);
+        }
         context.setColor(Color.BLACK);
         context.fillRect(5, 715, 215, 51);
         context.setColor(Color.GREEN);
+        if(dude.hp <= 45){
+            context.setColor(Color.YELLOW);
+        }
+        if(curLevel == 6 || dude.hp <= 20){
+            context.setColor(Color.RED);
+        }
         if (dude.hp >= 0) {
             context.fillRect(13, 723, dude.hp * 2, 37);
+        }
+        if(dude.hp <= 0){
+            context.setColor(Color.BLACK);
+           context.fillRect(0,0,5000,5000);
         }
     }
 
@@ -127,6 +143,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     }
 
     public void loadNext(int level) {
+        modal.showModal(null);
         mobs.clear();
         switch (curLevel) {
             case 1:
@@ -142,6 +159,9 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                 load("LevelFive.game");
                 break;
             case 5:
+                load("LevelOne.game");
+                break;
+            case 6:
                 load("LevelOne.game");
                 break;
         }
@@ -181,24 +201,30 @@ public class Panel extends JPanel implements Runnable, MouseListener {
 
     public void tick() {
         if(dude.hp <= 0){
-            dude = null;
+            load("LevelSix.game ");
+            dude.hasKey = true;
+            mobs.clear();
+            dude.hp = 100;
+            curLevel = 6;
         }
         tickCount++;
         if (listener.attacking) {
+            if(Math.abs(dude.tickCount) - dude.lastAttackTick > 10){
+                play("images/swordSwoosh.wav");
+            }
             dude.attack(mobs, placeX, placeY);
         }
 
         for (int i = mobs.size() - 1; i >= 0; i--) {
             Mob curMob = mobs.get(i);
-            
-            if (playerTakeDamage(curMob.x, curMob.y)) {
-                dude.hp -= 20;
-                if(curMob.getClass() == Fireball.class){
+            if(curMob.getClass() == Fireball.class && playerTakeDamage(curMob.x, curMob.y)){
                 mobs.remove(i);
-                dude.hp += 20;
                 dude.hp /= 2;
-                dude.hp -= 10;
+
             }
+            if (playerTakeDamage(curMob.x, curMob.y) && (curMob.getClass() == Guard.class || curMob.getClass() == Princess.class) && tickCount % 10 == 0) {
+                dude.hp -= 20;
+                
             }
             curMob.tick(tiles, dude, mobs);
             if (curMob.isDead()) {
@@ -217,7 +243,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
 
                 if ((isPointInPlayer(x * 32, y * 32) || isPointInPlayer(x * 32 + 32, y * 32)
                         || isPointInPlayer(x * 32, y * 32 + 32) || isPointInPlayer(x * 32 + 32, y * 32 + 32))
-                        && tiles[x][y].getClass() == TransitionTile.class) {
+                        && tiles[x][y].getClass() == TransitionTile.class && dude.hasKey) {
                     loadNext(curLevel);
                 }
 
@@ -318,15 +344,14 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         this.filename = filename;
     }
 
-    public void play() {
+    public void play(String file) {
         try {
-            if (clip == null) {
-                java.net.URL url = this.getClass().getResource("images/dungeonMusic.wav");
+                java.net.URL url = this.getClass().getResource(file);
                 AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(url);
                 // Get a clip resource.
                 clip = AudioSystem.getClip();
                 clip.open(audioInputStream);
-            }
+            
 
             clip.start();
         } catch (Exception e) {
@@ -547,5 +572,4 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             tiles[(int) (x / 32)][(int) (y / 32)] = placeTile;
         }
     }
-
 }

@@ -13,34 +13,18 @@ public class MainThing {
     private String filename;
     private Player player; 
     private Clip clip;
+    public static JFrame gameFrame;
 
     public MainThing(String fileName){
         this.filename = filename;
     }
 
-    public void play() {
-        try {   
-            if(clip == null){
-                URL url = this.getClass().getResource("images/dungeonMusic.mp3");
-                AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(url);
-                // Get a clip resource.
-                clip = AudioSystem.getClip();
-                clip.open(audioInputStream);
-                clip.loop(5);
-            }
-
-          //  clip.loop(1);
-        }
-        catch (Exception e) {
-       
-            System.out.println(e);
-        }
-    }
 
     public static void main(String[] args){
         
         // Creates frame and panel
         JFrame myFrame = new JFrame("game");
+        gameFrame = myFrame;
         Panel myPanel = new LevelOne("images/dungeonMusic.mp3");
         myFrame.add(myPanel);
         myFrame.setVisible(true);
@@ -66,6 +50,8 @@ public class MainThing {
         file.add(SaveItem4);
         MenuItem SaveItem5 = new MenuItem("Save5");
         file.add(SaveItem5);
+        MenuItem SaveItem6 = new MenuItem("Save G.O.");
+        file.add(SaveItem6);
         // Creates 5 ways to load and adds to menu
         MenuItem LoadItem1 = new MenuItem("Load1");
         file.add(LoadItem1);
@@ -77,12 +63,15 @@ public class MainThing {
         file.add(LoadItem4);
         MenuItem LoadItem5 = new MenuItem("Load5");
         file.add(LoadItem5);
+        MenuItem LoadItem6 = new MenuItem("Load G.O.");
+        file.add(LoadItem6);
         // Adds function to the menu items
         SaveItem1.addActionListener(action -> myPanel.save("LevelOne.game"));
         SaveItem2.addActionListener(action -> myPanel.save("LevelTwo.game"));
         SaveItem3.addActionListener(action -> myPanel.save("LevelThree.game"));
         SaveItem4.addActionListener(action -> myPanel.save("LevelFour.game"));
         SaveItem5.addActionListener(action -> myPanel.save("LevelFive.game"));
+        SaveItem6.addActionListener(action -> myPanel.save("LevelSix.game"));
 
         LoadItem1.addActionListener(action -> myPanel.load("LevelOne.game"));
         LoadItem1.addActionListener(action -> myPanel.curLevel = 1);
@@ -94,6 +83,9 @@ public class MainThing {
         LoadItem4.addActionListener(action -> myPanel.curLevel = 4);
         LoadItem5.addActionListener(action -> myPanel.load("LevelFive.game"));
         LoadItem5.addActionListener(action -> myPanel.curLevel = 5);
+        LoadItem6.addActionListener(action -> myPanel.load("LevelSix.game"));
+        LoadItem6.addActionListener(action -> myPanel.curLevel = 6);
+        LoadItem6.addActionListener(action -> myPanel.giveKey());
         Menu main = new Menu("Tiles");
         bar.add(file);
         

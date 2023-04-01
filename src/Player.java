@@ -19,9 +19,8 @@ public class Player {
     boolean facingLeft = false;
     int attackTick = 0;
     private Image[] playerImages = new Image[4];
-    boolean hasKey = false;
+    boolean hasKey = true;
     int lastAttackTick = 0;
-
 
     public Player() {
         URL img1 = getClass().getClassLoader().getResource("images/wolf-2.png");
