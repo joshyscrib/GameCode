@@ -61,7 +61,7 @@ public class Player {
     //   int attackX = x + 32 + 30;
     //  int attackY = y + 30;
         for(Mob curMob : mobs){
-            if((curMob.x >= x - 30 && curMob.x < x + 62 && curMob.y >= y - 30 && curMob.y < y + 64) || (curMob.x + 32 >= x - 30 && curMob.x + 32 < x + 62 && curMob.y >= y - 30 && curMob.y < y + 64) || (curMob.x >= x - 30 && curMob.x < x + 62 && curMob.y + 64 >= y - 30 && curMob.y + 64 < y + 64) || (curMob.x >= x + 32 - 30 && curMob.x + 32 < x + 62 && curMob.y + 64 >= y - 30 && curMob.y + 64 < y + 64) || (curMob.x >= x - 30 && curMob.x < x + 62 && curMob.y >= y - 30 && curMob.y < y + 64)){
+            if((curMob.x >= x - 32 && curMob.x <= x + 64 && curMob.y >= y - 32 && curMob.y <= y + 96) || (curMob.x + 32 >= x - 32 && curMob.x + 32 <= x + 64 && curMob.y >= y - 32 && curMob.y <= y + 96) || (curMob.x >= x - 32 && curMob.x <= x + 64 && curMob.y + 64 >= y - 32 && curMob.y + 64 <= y + 96) || (curMob.x + 32 >= x - 32 && curMob.x + 32<= x + 64 && curMob.y + 64 >= y - 32 && curMob.y + 64 <= y + 96)){
                 System.out.println("hit!");
                 curMob.gotHit(atk, this.playerDirection);
             }
@@ -87,7 +87,7 @@ public class Player {
             context.setColor(Color.GRAY);
             switch(playerDirection){
             case Up:
-            context.fillRect(x + 15, y - 5, 10, 30);
+            context.fillRect(x + 15, y - 25, 10, 30);
                 break;
             case Left:
             context.fillRect(x,y + 27,-30,10);
@@ -100,5 +100,7 @@ public class Player {
                 break;
         }
         }
+        context.setColor(Color.RED);
+        //context.drawRect(x-32,y-32,96,128);
     }
 }

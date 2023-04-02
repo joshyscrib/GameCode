@@ -22,5 +22,11 @@ public class LevelOne extends Panel{
         for(Mob curMob : mobs){
             curMob.paint(context);
         }
+
+        
+        if(dude.hp <= 20){
+            context.setColor(lowHpColor);
+            context.fillRect(0,0,704,704);
+        }
     }
 }

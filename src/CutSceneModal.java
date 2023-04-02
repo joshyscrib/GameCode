@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import javafx.scene.media.MediaPlayer;
 
 public class CutSceneModal {
     Image fireballImg;
@@ -25,12 +26,12 @@ public class CutSceneModal {
         lbl.setSize(400,300);
         panel.add(lbl);
         
-        modelDialog.add(panel);
+        //modelDialog.add(panel);
         modelDialog.setSize(600,400);
         modelDialog.setLocation(300,300);
         modelDialog.pack();
         modelDialog.setVisible(true);
         modelDialog.setResizable(false);
-
+        
     }
 }

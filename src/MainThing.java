@@ -129,8 +129,12 @@ public class MainThing {
         MenuItem PSpawnItem = new MenuItem("Princess");
         main.add(PSpawnItem);
         PSpawnItem.addActionListener(action -> myPanel.setMenuTile(PSpawnTile.class));
+        MenuItem StartItem = new MenuItem("Start");
+        main.add(StartItem);
+        StartItem.addActionListener(action -> myPanel.setMenuTile(StartTile.class));
 
-        
+        Menu items = new Menu("Items");
+        bar.add(items);
 
         myFrame.setMenuBar(bar);
 

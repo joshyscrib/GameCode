@@ -18,7 +18,7 @@ public class Sprite {
     Random r = new Random();
     int tickCount = 0;
     int lastHitTick = -1000;
-
+    boolean isFast = false;
     public void paint(Graphics g) {
         Graphics2D context = (Graphics2D) g;
     }

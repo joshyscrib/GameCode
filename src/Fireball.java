@@ -9,8 +9,15 @@ public class Fireball extends Mob{
     Direction direction = Direction.Left;
     double dx;
     double dy;
+    double randHyp = 0.5;
+    
     public Fireball(int s, Direction d, ArrayList<Mob> mobs, double angle) {
+        
         super(s);
+    randHyp = Math.random(); 
+    if(randHyp <= 0.29){
+        isFast = true;
+    }
         for(int i = 0; i < mobs.size(); i++){
                 if(mobs.get(i).getClass() == Princess.class){
                     direction = mobs.get(i).monsterDirection;
@@ -36,6 +43,10 @@ public class Fireball extends Mob{
             
                 x += dx;
                 y += dy;
+                if(randHyp <= 0.29){
+                x += dx;
+                y += dy;
+                }
             if(x < -10 || x > 690 || y < -10 || y > 690){
                 mobs.remove(this);
             }
