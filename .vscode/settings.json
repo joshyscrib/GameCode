@@ -1,6 +1,7 @@
 {
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
-        "javafx.media.jar"
+        "javafx.media.jar",
+        "javafx.swing.jar"
     ]
 }

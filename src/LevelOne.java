@@ -15,7 +15,12 @@ public class LevelOne extends Panel{
             for(int y = 0; y < yTiles; y++){
                 Tile curTile = tiles[x][y];
                     curTile.drawTile(context, x * 32, y * 32);
-                
+                    if(items[x][y] != null){
+                        if(items[x][y].getClass() == HealthPotion.class){
+                            context.setColor(Color.RED);
+                            context.fillRect(x * 32 + 5, y * 32 + 5, 22, 22);
+                        }
+                    }
             }
         }
         dude.paint(context,placeX,placeY);
@@ -24,7 +29,7 @@ public class LevelOne extends Panel{
         }
 
         
-        if(dude.hp <= 20){
+        if(dude.hp <= 20 || curLevel == 6){
             context.setColor(lowHpColor);
             context.fillRect(0,0,704,704);
         }

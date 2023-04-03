@@ -22,7 +22,9 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     GameKeyListener listener = new GameKeyListener(this);
     public static int xTiles = 22;
     public static int yTiles = 22;
-    Tile[][] tiles = new Tile[xTiles][xTiles];
+    Tile[][] tiles = new Tile[xTiles][yTiles];
+    Item[][] items = new Item[xTiles][yTiles];
+    
     Player dude = new Player();
     Point location = MouseInfo.getPointerInfo().getLocation();
     double mouseX = location.getX();
@@ -43,7 +45,8 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     }
 
     public void init() {
-        play("images/dungeonMusic.wav");
+        items[9][9] = new HealthPotion();
+        play("images/dungeonMusic.wav", true);
         for (int i = 0; i < xTiles; i++) {
             for (int j = 0; j < yTiles; j++) {
                 tiles[i][j] = new FloorTile();
@@ -93,6 +96,21 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                 if(tiles[i][j].getClass() == StartTile.class){
                     placeX= i*32 - 5;
                     placeY = j*32 - 20;
+                }
+            }
+        }
+    }
+
+    public void pickUpItem(int X, int Y){
+        boolean collide = false;
+        if(isPointInPlayer(X * 32, Y * 32) || isPointInPlayer(X * 32 + 32, Y * 32) || isPointInPlayer(X * 32, Y * 32 + 32) || isPointInPlayer(X * 32 + 32, Y * 32 + 32)){
+            collide = true;
+        }
+        if(collide){
+            if(items[X][Y] != null){
+                if(items[X][Y].getClass() == HealthPotion.class && dude.hp < 100){
+                    dude.hp += 25;
+                    items[X][Y] = null;
                 }
             }
         }
@@ -202,6 +220,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     int tickCount = 0;
 
     public void tick() {
+        
         if(listener.healing && dude.hp < 100){
             dude.hp += 2;
         }
@@ -215,18 +234,20 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         tickCount++;
         if (listener.attacking) {
             if (Math.abs(dude.tickCount) - dude.lastAttackTick > 10) {
-                play("images/swordSwoosh.wav");
+                play("images/swordSwoosh.wav", false);
             }
             dude.attack(mobs, placeX, placeY);
         }
 
         for (int i = mobs.size() - 1; i >= 0; i--) {
             Mob curMob = mobs.get(i);
+            if(curMob.getClass() == Fireball.class){
+            }
             if (curMob.getClass() == Fireball.class && playerTakeDamage(curMob.x, curMob.y)) {
 
                 mobs.remove(i);
                 if(curMob.isFast){
-                    dude.hp -= 50;
+                    dude.hp -= 60;
                 }
                 else{
                     dude.hp /=2;
@@ -235,8 +256,11 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             }
             if (playerTakeDamage(curMob.x, curMob.y)
                     && (curMob.getClass() == Guard.class || curMob.getClass() == Princess.class)
-                    && tickCount % 10 == 0) {
+                    && tickCount % 12 == 0) {
                 dude.hp -= 20;
+                if(curMob.getClass() == Princess.class){
+                    dude.hp -= 10;
+                }
 
             }
             curMob.tick(tiles, dude, mobs);
@@ -253,7 +277,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         for (int x = 0; x < xTiles; x++) {
             for (int y = 0; y < yTiles; y++) {
                 tiles[x][y].tick();
-
+                pickUpItem(x, y);
                 if ((isPointInPlayer(x * 32, y * 32) || isPointInPlayer(x * 32 + 32, y * 32)
                         || isPointInPlayer(x * 32, y * 32 + 32) || isPointInPlayer(x * 32 + 32, y * 32 + 32))
                         && tiles[x][y].getClass() == TransitionTile.class && dude.hasKey) {
@@ -302,8 +326,8 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             if (mobs.get(i).getClass() == Princess.class) {
                 if (tickCount % 100 == 0) {
                     // finds distance between princess and player(to shoot a fireball)
-                    double dx = placeX - mobs.get(i).x;
-                    double dy = placeY - mobs.get(i).y;
+                    double dx = placeX + 15 - mobs.get(i).x;
+                    double dy = placeY + 30 - mobs.get(i).y;
                     double hyp = Math.sqrt(dx * dx + dy * dy);
                     double angrad = Math.atan2(dy, dx);
                     // angrad += Math.PI/2.0;
@@ -322,7 +346,9 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                 }
             }
         }
-
+        if(dude.hp > 100){
+            dude.hp = 100;
+        }
     }
 
 
@@ -355,7 +381,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         this.filename = filename;
     }
 
-    public void play(String file) {
+    public void play(String file, boolean loop) {
         try {
             java.net.URL url = this.getClass().getResource(file);
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(url);
@@ -363,7 +389,12 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             clip = AudioSystem.getClip();
             clip.open(audioInputStream);
 
-            clip.start();
+            if(loop){
+                clip.loop(Clip.LOOP_CONTINUOUSLY);
+            }
+            else{
+                clip.start();
+            }
         } catch (Exception e) {
 
             System.out.println(e);

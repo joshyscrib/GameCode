@@ -9,7 +9,7 @@ import javax.imageio.ImageIO;
 public class Tile implements Serializable{
     int tickCount = 0;
     Image image;
-    //ArrayList<Item> items = new ArrayList<Item>();
+
     public void tick() {
         tickCount++;
     }

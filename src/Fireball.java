@@ -25,7 +25,12 @@ public class Fireball extends Mob{
             }
         
         try {
-            fireballImg = ImageIO.read(getClass().getClassLoader().getResource("images/fireball.png"));
+            if(!isFast){
+                fireballImg = ImageIO.read(getClass().getClassLoader().getResource("images/fireball.png"));
+            }
+            else{
+                fireballImg = ImageIO.read(getClass().getClassLoader().getResource("images/fastball.png"));
+            }
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -46,6 +51,8 @@ public class Fireball extends Mob{
                 if(randHyp <= 0.29){
                 x += dx;
                 y += dy;
+                x += dx / 2;
+                y += dy / 2;
                 }
             if(x < -10 || x > 690 || y < -10 || y > 690){
                 mobs.remove(this);
