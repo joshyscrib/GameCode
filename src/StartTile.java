@@ -6,20 +6,21 @@ public class StartTile extends Tile{
     private static Image image = null;
     @Override
     public void drawTile(Graphics2D context, int x, int y){
+        if(image == null){
+            URL img = getClass().getClassLoader().getResource("images/startTile.png");
+            try{
+            image = ImageIO.read(img);
+            System.out.println("LOADING IMAGE BEEP BOOP");
+            }
+            catch(IOException ex){
+                System.out.println("EXCEPTION ):  " + ex);
+            }
+        }
+            
         super.drawTile(context, x, y);
         context.drawImage(image, x, y, null);
     }
     public StartTile(){
-        if(image == null){
-        URL img = getClass().getClassLoader().getResource("images/floorTile.png");
-        try{
-        image = ImageIO.read(img);
-        System.out.println("LOADING IMAGE BEEP BOOP");
-        }
-        catch(IOException ex){
-            System.out.println("EXCEPTION ):  " + ex);
-        }
-    }
         
     }
 

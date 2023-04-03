@@ -143,8 +143,11 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     public void clearAll() {
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[0].length; j++) {
-                tiles[i][j] = null;
-                tiles[i][j] = new FloorTile();
+                
+                if(tiles[i][j].getClass() != SBarTile.class){
+                    tiles[i][j] = null;
+                    tiles[i][j] = new BarsTile();
+                }
             }
             
         }
