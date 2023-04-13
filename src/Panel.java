@@ -34,6 +34,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     int curLevel = 1;
     int placeX = 200;
     int placeY = 200;
+    int curWeapon = 1;
     Color lowHpColor = new Color(250,5,5,50);
     // here is a comment
     public void setMenuTile(Class c) {
@@ -85,6 +86,8 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         System.out.println("We are loading!!!!");
         for (int i = 0; i < xTiles; i++) {
             for (int j = 0; j < yTiles; j++) {
+
+
                 if (tiles[i][j].getClass() == SpawnTile.class) {
                     Guard guard = new Guard(i * 32, j * 32);
                     mobs.add(guard);
@@ -97,6 +100,8 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                     placeX= i*32 - 5;
                     placeY = j*32 - 20;
                 }
+                
+
             }
         }
     }
@@ -112,6 +117,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                     dude.hp += 25;
                     items[X][Y] = null;
                 }
+                
             }
         }
     }
@@ -135,7 +141,10 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         if (dude.hp >= 0) {
             context.fillRect(715, 215, 37, dude.hp * -2);
         }
-       
+       context.setColor(Color.GREEN);
+       context.fillRoundRect(715, 250, 70, 70, 25, 25);
+       context.setColor(Color.BLACK);
+       context.fillRoundRect(717, 252, 66, 66, 25, 25);
     }
 
     double speed = 4;
@@ -144,10 +153,8 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[0].length; j++) {
                 
-                if(tiles[i][j].getClass() != SBarTile.class){
-                    tiles[i][j] = null;
-                    tiles[i][j] = new BarsTile();
-                }
+                    tiles[i][j] = new FloorTile();
+                
             }
             
         }
@@ -223,6 +230,29 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     int tickCount = 0;
 
     public void tick() {
+        for(int i = 0; i < tiles.length; i++){
+            for(int j = 0; j < tiles[i].length; j++){
+                if (isPointInPlayer(i * 32, j * 32) || isPointInPlayer(i * 32 + 32, j * 32) || isPointInPlayer(i * 32, j * 32 + 32)
+                || isPointInPlayer(i * 32 + 32, j * 32 + 32)){
+
+
+                    if(tiles[i][j].getClass() == SwordChestTile.class){
+                        curWeapon++;
+                        tiles[i][j] = new FloorTile();
+
+                    }
+                    if(tiles[i][j].getClass() == TransitionTile.class && dude.hasKey){
+                        loadNext(curLevel);
+
+                    }
+                    if((i * 32 >= placeX - 36 && i * 32 <= placeX + 68 && j * 32 >= placeY - 35 && j * 32 <= placeY + 99) || (i * 32 + 35 >= placeX - 37 && i * 32 + 37 <= placeX + 67 && j * 32 >= placeY - 37 && j * 32 <= placeY + 98) || (i * 32 >= placeX - 35 && i * 32 <= placeX + 67 && j * 32 + 67 >= placeY - 36 && j * 32 + 64 <= placeY + 96) || (i * 32 + 32 >= placeX - 32 && i * 32 + 32<= placeX + 64 && j * 32 + 67 >= placeY - 38 && j * 32 + 7 <= placeY + 99)){
+                        if(tiles[i][j].getClass() == WoodTile.class && dude.isAttacking)
+                        tiles[i][j] = new FloorTile();
+                    }
+
+                }
+            }
+        }
         
         if(listener.healing && dude.hp < 100){
             dude.hp += 2;
@@ -281,11 +311,6 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             for (int y = 0; y < yTiles; y++) {
                 tiles[x][y].tick();
                 pickUpItem(x, y);
-                if ((isPointInPlayer(x * 32, y * 32) || isPointInPlayer(x * 32 + 32, y * 32)
-                        || isPointInPlayer(x * 32, y * 32 + 32) || isPointInPlayer(x * 32 + 32, y * 32 + 32))
-                        && tiles[x][y].getClass() == TransitionTile.class && dude.hasKey) {
-                    loadNext(curLevel);
-                }
 
             }
         }
@@ -450,6 +475,9 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             case "StartTile":
                 placeTile = new StartTile();
                 break;
+            case "SwordChestTile":
+                placeTile = new SwordChestTile();
+                break;
 
         }
         if (placeTile != null) {
@@ -503,6 +531,9 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                 break;
             case "StartTile":
                 placeTile = new StartTile();
+                break;
+            case "SwordChestTile":
+                placeTile = new SwordChestTile();
                 break;
 
         }
@@ -558,6 +589,9 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             case "StartTile":
                 placeTile = new StartTile();
                 break;
+                case "SwordChestTile":
+                    placeTile = new SwordChestTile();
+                    break;
 
         }
         if (placeTile != null) {
@@ -622,6 +656,9 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             case "StartTile":
                 placeTile = new StartTile();
                 break;
+                case "SwordChestTile":
+                    placeTile = new SwordChestTile();
+                    break;
 
         }
         if (placeTile != null) {
