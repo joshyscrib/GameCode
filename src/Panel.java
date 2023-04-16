@@ -46,7 +46,6 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     }
 
     public void init() {
-        items[9][9] = new HealthPotion();
         play("images/dungeonMusic.wav", true);
         for (int i = 0; i < xTiles; i++) {
             for (int j = 0; j < yTiles; j++) {
@@ -100,7 +99,10 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                     placeX= i*32 - 5;
                     placeY = j*32 - 20;
                 }
-                
+                items[i][j] = null;
+                if(tiles[i][j].getClass() == HealthTile.class){
+                    items[i][j] = new HealthPotion();
+                }
 
             }
         }
@@ -478,6 +480,10 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             case "SwordChestTile":
                 placeTile = new SwordChestTile();
                 break;
+            case "HealthTile":
+                placeTile = new HealthTile();
+                break;
+
 
         }
         if (placeTile != null) {
@@ -535,6 +541,9 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             case "SwordChestTile":
                 placeTile = new SwordChestTile();
                 break;
+                case "HealthTile":
+                    placeTile = new HealthTile();
+                    break;
 
         }
         if (placeTile != null) {
@@ -592,6 +601,9 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                 case "SwordChestTile":
                     placeTile = new SwordChestTile();
                     break;
+                    case "HealthTile":
+                        placeTile = new HealthTile();
+                        break;
 
         }
         if (placeTile != null) {
@@ -659,6 +671,9 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                 case "SwordChestTile":
                     placeTile = new SwordChestTile();
                     break;
+                    case "HealthTile":
+                        placeTile = new HealthTile();
+                        break;
 
         }
         if (placeTile != null) {

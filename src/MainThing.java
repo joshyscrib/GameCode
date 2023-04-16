@@ -132,9 +132,12 @@ public class MainThing {
         MenuItem StartItem = new MenuItem("Start");
         main.add(StartItem);
         StartItem.addActionListener(action -> myPanel.setMenuTile(StartTile.class));
-        MenuItem SwordChestItem = new MenuItem("SwordChest");
+        MenuItem SwordChestItem = new MenuItem("Sword Chest");
         main.add(SwordChestItem);
         SwordChestItem.addActionListener(action -> myPanel.setMenuTile(SwordChestTile.class));
+        MenuItem HealthTileItem = new MenuItem("Health Potion");
+        main.add(HealthTileItem);
+        HealthTileItem.addActionListener(action -> myPanel.setMenuTile(HealthTile.class));
 
         Menu items = new Menu("Items");
         bar.add(items);
