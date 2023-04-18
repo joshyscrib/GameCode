@@ -231,9 +231,17 @@ public class Panel extends JPanel implements Runnable, MouseListener {
 
     int tickCount = 0;
 
+    private boolean isPointInTile(int x, int y, int tileLeft, int tileTop){
+
+        return false;
+    }
+
     public void tick() {
         for(int i = 0; i < tiles.length; i++){
+            int tileLeft = i *32;
             for(int j = 0; j < tiles[i].length; j++){
+                Tile currentTile= tiles[i][j];
+                int tileTop = j * 32;
                 if (isPointInPlayer(i * 32, j * 32) || isPointInPlayer(i * 32 + 32, j * 32) || isPointInPlayer(i * 32, j * 32 + 32)
                 || isPointInPlayer(i * 32 + 32, j * 32 + 32)){
 
@@ -245,9 +253,24 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                     }
                     if(tiles[i][j].getClass() == TransitionTile.class && dude.hasKey){
                         loadNext(curLevel);
-
                     }
-                    if((i * 32 >= placeX - 36 && i * 32 <= placeX + 68 && j * 32 >= placeY - 35 && j * 32 <= placeY + 99) || (i * 32 + 35 >= placeX - 37 && i * 32 + 37 <= placeX + 67 && j * 32 >= placeY - 37 && j * 32 <= placeY + 98) || (i * 32 >= placeX - 35 && i * 32 <= placeX + 67 && j * 32 + 67 >= placeY - 36 && j * 32 + 64 <= placeY + 96) || (i * 32 + 32 >= placeX - 32 && i * 32 + 32<= placeX + 64 && j * 32 + 67 >= placeY - 38 && j * 32 + 7 <= placeY + 99)){
+
+                    int weaponTipX = 0;
+                    int weaponTipY = 0;
+
+                    //See If the player is attacking, and the tile we're checking is wood
+                    if(dude.isAttacking && currentTile.getClass() == WoodTile.class){
+                        //See if the sword of the player is inside the wood tile
+                       if(isPointInTile(weaponTipX, weaponTipY, tileLeft, tileTop))   {
+                            // the player has stabbed a wood tile, let's turn it into a floor tile
+                            tiles[i][j] = new FloorTile();
+                      }
+                    }
+
+                    if((tileLeft >= placeX - 36 && tileLeft <= placeX + 68 && tileTop >= placeY - 35 && tileTop <= placeY + 99) 
+                    || (tileLeft + 35 >= placeX - 37 && tileLeft + 37 <= placeX + 67 && tileTop >= placeY - 37 && tileTop <= placeY + 98) 
+                    || (tileLeft >= placeX - 35 && tileLeft <= placeX + 67 && tileTop + 67 >= placeY - 36 && tileTop + 64 <= placeY + 96) 
+                    || (tileLeft + 32 >= placeX - 32 && tileLeft + 32<= placeX + 64 && tileTop + 67 >= placeY - 38 && tileTop + 7 <= placeY + 99)){
                         if(tiles[i][j].getClass() == WoodTile.class && dude.isAttacking)
                         tiles[i][j] = new FloorTile();
                     }

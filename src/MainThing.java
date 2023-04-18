@@ -139,8 +139,6 @@ public class MainThing {
         main.add(HealthTileItem);
         HealthTileItem.addActionListener(action -> myPanel.setMenuTile(HealthTile.class));
 
-        Menu items = new Menu("Items");
-        bar.add(items);
 
         myFrame.setMenuBar(bar);
 
