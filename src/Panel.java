@@ -1,4 +1,6 @@
 
+import javax.imageio.ImageIO;
+import javax.print.DocFlavor.URL;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -9,6 +11,7 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
@@ -144,9 +147,81 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             context.fillRect(715, 215, 37, dude.hp * -2);
         }
        context.setColor(Color.GREEN);
-       context.fillRoundRect(715, 250, 70, 70, 25, 25);
+       context.fillRect(715, 250, 70, 70);
        context.setColor(Color.BLACK);
-       context.fillRoundRect(717, 252, 66, 66, 25, 25);
+       context.fillRect(717, 252, 66, 66);
+       Image image1 = null;
+       Image image2 = null;
+       Image image3 = null;
+       Image image4 = null;
+       switch(curWeapon){
+        case 1:
+        if(image1 == null){
+            java.net.URL img = getClass().getClassLoader().getResource("images/dagger.png");
+            try{
+            image1 = ImageIO.read(img);
+            System.out.println("LOADING IMAGE BEEP BOOP");
+            }
+            catch(IOException ex){
+                System.out.println("EXCEPTION ):  " + ex);
+            }
+        }
+        context.drawImage(image1,717,252, null);
+            break;
+        case 2:
+        if(image2 == null){
+            java.net.URL img = getClass().getClassLoader().getResource("images/claymore.png");
+            try{
+            image2 = ImageIO.read(img);
+            System.out.println("LOADING IMAGE BEEP BOOP");
+            }
+            catch(IOException ex){
+                System.out.println("EXCEPTION ):  " + ex);
+            }
+        }
+        context.drawImage(image2,717,252, null);
+            break;
+        case 3:
+        if(image3 == null){
+            java.net.URL img = getClass().getClassLoader().getResource("images/mace.png");
+            try{
+            image3 = ImageIO.read(img);
+            System.out.println("LOADING IMAGE BEEP BOOP");
+            }
+            catch(IOException ex){
+                System.out.println("EXCEPTION ):  " + ex);
+            }
+        }
+        context.drawImage(image3,717,252, null);
+            break;
+        case 4:
+        if(image4 == null){
+            java.net.URL img = getClass().getClassLoader().getResource("images/darkSword.png");
+            try{
+            image4 = ImageIO.read(img);
+            System.out.println("LOADING IMAGE BEEP BOOP");
+            }
+            catch(IOException ex){
+                System.out.println("EXCEPTION ):  " + ex);
+            }
+        }
+        context.drawImage(image4,717,252, null);
+            break;
+        default:
+        if(image4 == null){
+            java.net.URL img = getClass().getClassLoader().getResource("images/darkSword.png");
+            try{
+            image4 = ImageIO.read(img);
+            System.out.println("LOADING IMAGE BEEP BOOP");
+            }
+            catch(IOException ex){
+                System.out.println("EXCEPTION ):  " + ex);
+            }
+        }
+        context.drawImage(image4,717,252, null);
+        break;
+       }
+       
     }
 
     double speed = 4;
@@ -267,10 +342,10 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                       }
                     }
 
-                    if((tileLeft >= placeX - 36 && tileLeft <= placeX + 68 && tileTop >= placeY - 35 && tileTop <= placeY + 99) 
-                    || (tileLeft + 35 >= placeX - 37 && tileLeft + 37 <= placeX + 67 && tileTop >= placeY - 37 && tileTop <= placeY + 98) 
-                    || (tileLeft >= placeX - 35 && tileLeft <= placeX + 67 && tileTop + 67 >= placeY - 36 && tileTop + 64 <= placeY + 96) 
-                    || (tileLeft + 32 >= placeX - 32 && tileLeft + 32<= placeX + 64 && tileTop + 67 >= placeY - 38 && tileTop + 7 <= placeY + 99)){
+                    if((tileLeft >= placeX - 96 && tileLeft <= placeX + 96 && tileTop >= placeY - 96 && tileTop <= placeY + 128) 
+                    || (tileLeft + 96 >= placeX - 96 && tileLeft + 96 <= placeX + 96 && tileTop >= placeY - 96 && tileTop <= placeY + 128) 
+                    || (tileLeft >= placeX - 96 && tileLeft <= placeX + 96 && tileTop + 96 >= placeY - 96 && tileTop + 96 <= placeY + 128) 
+                    || (tileLeft + 96 >= placeX - 96 && tileLeft + 96<= placeX + 96 && tileTop + 96 >= placeY - 96 && tileTop + 96 <= placeY + 128)){
                         if(tiles[i][j].getClass() == WoodTile.class && dude.isAttacking)
                         tiles[i][j] = new FloorTile();
                     }

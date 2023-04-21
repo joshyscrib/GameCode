@@ -47,5 +47,7 @@ Image image;
             context.setColor(lowHpColor);
             context.fillRect(0,0,704,704);
         }
+        context.setColor(Color.YELLOW);
+       context.drawRect(placeX-32,placeY-32,64 + 32,96 + 32);
     }
 }

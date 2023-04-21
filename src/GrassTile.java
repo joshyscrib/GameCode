@@ -11,15 +11,15 @@ public class GrassTile extends Tile{
     }
     public GrassTile(){
         if(image == null){
-        URL img = getClass().getClassLoader().getResource("images/grassTile.png");
-        try{
-        image = ImageIO.read(img);
-        System.out.println("LOADING IMAGE BEEP BOOP");
+            URL img = getClass().getClassLoader().getResource("images/grassTile.png");
+            try{
+            image = ImageIO.read(img);
+            System.out.println("LOADING IMAGE BEEP BOOP");
+            }
+            catch(IOException ex){
+                System.out.println("EXCEPTION ):  " + ex);
+            }
         }
-        catch(IOException ex){
-            System.out.println("EXCEPTION ):  " + ex);
-        }
-    }
         
     }
 
