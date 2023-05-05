@@ -20,14 +20,17 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     private Player player;
     private Clip clip;
 
-    //CutSceneModal modal = new CutSceneModal();
+    private static int PLAYER_HEIGHT = 64;
+    private static int PLAYER_WIDTH = 64;
+    private static int TILE_WIDTH = 32;
+    private static int TILE_HEIGHT = 32;
 
     GameKeyListener listener = new GameKeyListener(this);
     public static int xTiles = 22;
     public static int yTiles = 22;
     Tile[][] tiles = new Tile[xTiles][yTiles];
     Item[][] items = new Item[xTiles][yTiles];
-    
+
     Player dude = new Player();
     Point location = MouseInfo.getPointerInfo().getLocation();
     double mouseX = location.getX();
@@ -38,7 +41,10 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     int placeX = 200;
     int placeY = 200;
     int curWeapon = 1;
-    Color lowHpColor = new Color(250,5,5,50);
+    boolean hasPlayedCredits = false;
+    Color lowHpColor = new Color(250, 5, 5, 50);
+    int curCount = 999999999;
+
     // here is a comment
     public void setMenuTile(Class c) {
         menuTile = c;
@@ -49,14 +55,18 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     }
 
     public void init() {
-        play("images/dungeonMusic.wav", true);
+
         for (int i = 0; i < xTiles; i++) {
             for (int j = 0; j < yTiles; j++) {
                 tiles[i][j] = new FloorTile();
             }
         }
         addMouseListener(this);
+
+        CutSceneModal m = new CutSceneModal();
+        m.showModal(MainThing.gameFrame, "src/images/openingscene.mp4");
         load("LevelOne.game");
+        play("images/dungeonMusic.wav", true);
 
     }
 
@@ -89,7 +99,6 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         for (int i = 0; i < xTiles; i++) {
             for (int j = 0; j < yTiles; j++) {
 
-
                 if (tiles[i][j].getClass() == SpawnTile.class) {
                     Guard guard = new Guard(i * 32, j * 32);
                     mobs.add(guard);
@@ -98,12 +107,12 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                     Princess princess = new Princess(i * 32, j * 32);
                     mobs.add(princess);
                 }
-                if(tiles[i][j].getClass() == StartTile.class){
-                    placeX= i*32 - 5;
-                    placeY = j*32 - 20;
+                if (tiles[i][j].getClass() == StartTile.class) {
+                    placeX = i * 32 - 5;
+                    placeY = j * 32 - 20;
                 }
                 items[i][j] = null;
-                if(tiles[i][j].getClass() == HealthTile.class){
+                if (tiles[i][j].getClass() == HealthTile.class) {
                     items[i][j] = new HealthPotion();
                 }
 
@@ -111,18 +120,19 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         }
     }
 
-    public void pickUpItem(int X, int Y){
+    public void pickUpItem(int X, int Y) {
         boolean collide = false;
-        if(isPointInPlayer(X * 32, Y * 32) || isPointInPlayer(X * 32 + 32, Y * 32) || isPointInPlayer(X * 32, Y * 32 + 32) || isPointInPlayer(X * 32 + 32, Y * 32 + 32)){
+        if (isPointInPlayer(X * 32, Y * 32) || isPointInPlayer(X * 32 + 32, Y * 32)
+                || isPointInPlayer(X * 32, Y * 32 + 32) || isPointInPlayer(X * 32 + 32, Y * 32 + 32)) {
             collide = true;
         }
-        if(collide){
-            if(items[X][Y] != null){
-                if(items[X][Y].getClass() == HealthPotion.class && dude.hp < 100){
+        if (collide) {
+            if (items[X][Y] != null) {
+                if (items[X][Y].getClass() == HealthPotion.class && dude.hp < 100) {
                     dude.hp += 25;
                     items[X][Y] = null;
                 }
-                
+
             }
         }
     }
@@ -140,88 +150,82 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         if (dude.hp <= 45) {
             context.setColor(Color.YELLOW);
         }
-        if (curLevel == 6 || dude.hp <= 20) {
+        if (curLevel == 7 || dude.hp <= 20) {
             context.setColor(Color.RED);
         }
         if (dude.hp >= 0) {
             context.fillRect(715, 215, 37, dude.hp * -2);
         }
-       context.setColor(Color.GREEN);
-       context.fillRect(715, 250, 70, 70);
-       context.setColor(Color.BLACK);
-       context.fillRect(717, 252, 66, 66);
-       Image image1 = null;
-       Image image2 = null;
-       Image image3 = null;
-       Image image4 = null;
-       switch(curWeapon){
-        case 1:
-        if(image1 == null){
-            java.net.URL img = getClass().getClassLoader().getResource("images/dagger.png");
-            try{
-            image1 = ImageIO.read(img);
-            System.out.println("LOADING IMAGE BEEP BOOP");
-            }
-            catch(IOException ex){
-                System.out.println("EXCEPTION ):  " + ex);
-            }
+        context.setColor(Color.GREEN);
+        context.fillRect(715, 250, 70, 70);
+        context.setColor(Color.BLACK);
+        context.fillRect(717, 252, 66, 66);
+        Image image1 = null;
+        Image image2 = null;
+        Image image3 = null;
+        Image image4 = null;
+        switch (curWeapon) {
+            case 1:
+                if (image1 == null) {
+                    java.net.URL img = getClass().getClassLoader().getResource("images/dagger.png");
+                    try {
+                        image1 = ImageIO.read(img);
+
+                    } catch (IOException ex) {
+                        System.out.println("EXCEPTION ):  " + ex);
+                    }
+                }
+                context.drawImage(image1, 717, 252, null);
+                break;
+            case 2:
+                if (image2 == null) {
+                    java.net.URL img = getClass().getClassLoader().getResource("images/claymore.png");
+                    try {
+                        image2 = ImageIO.read(img);
+
+                    } catch (IOException ex) {
+                        System.out.println("EXCEPTION ):  " + ex);
+                    }
+                }
+                context.drawImage(image2, 717, 252, null);
+                break;
+            case 3:
+                if (image3 == null) {
+                    java.net.URL img = getClass().getClassLoader().getResource("images/mace.png");
+                    try {
+                        image3 = ImageIO.read(img);
+
+                    } catch (IOException ex) {
+                        System.out.println("EXCEPTION ):  " + ex);
+                    }
+                }
+                context.drawImage(image3, 717, 252, null);
+                break;
+            case 4:
+                if (image4 == null) {
+                    java.net.URL img = getClass().getClassLoader().getResource("images/darkSword.png");
+                    try {
+                        image4 = ImageIO.read(img);
+                    } catch (IOException ex) {
+                        System.out.println("EXCEPTION ):  " + ex);
+                    }
+                }
+                context.drawImage(image4, 717, 252, null);
+                break;
+            default:
+                if (image4 == null) {
+                    java.net.URL img = getClass().getClassLoader().getResource("images/darkSword.png");
+                    try {
+                        image4 = ImageIO.read(img);
+
+                    } catch (IOException ex) {
+                        System.out.println("EXCEPTION ):  " + ex);
+                    }
+                }
+                context.drawImage(image4, 717, 252, null);
+                break;
         }
-        context.drawImage(image1,717,252, null);
-            break;
-        case 2:
-        if(image2 == null){
-            java.net.URL img = getClass().getClassLoader().getResource("images/claymore.png");
-            try{
-            image2 = ImageIO.read(img);
-            System.out.println("LOADING IMAGE BEEP BOOP");
-            }
-            catch(IOException ex){
-                System.out.println("EXCEPTION ):  " + ex);
-            }
-        }
-        context.drawImage(image2,717,252, null);
-            break;
-        case 3:
-        if(image3 == null){
-            java.net.URL img = getClass().getClassLoader().getResource("images/mace.png");
-            try{
-            image3 = ImageIO.read(img);
-            System.out.println("LOADING IMAGE BEEP BOOP");
-            }
-            catch(IOException ex){
-                System.out.println("EXCEPTION ):  " + ex);
-            }
-        }
-        context.drawImage(image3,717,252, null);
-            break;
-        case 4:
-        if(image4 == null){
-            java.net.URL img = getClass().getClassLoader().getResource("images/darkSword.png");
-            try{
-            image4 = ImageIO.read(img);
-            System.out.println("LOADING IMAGE BEEP BOOP");
-            }
-            catch(IOException ex){
-                System.out.println("EXCEPTION ):  " + ex);
-            }
-        }
-        context.drawImage(image4,717,252, null);
-            break;
-        default:
-        if(image4 == null){
-            java.net.URL img = getClass().getClassLoader().getResource("images/darkSword.png");
-            try{
-            image4 = ImageIO.read(img);
-            System.out.println("LOADING IMAGE BEEP BOOP");
-            }
-            catch(IOException ex){
-                System.out.println("EXCEPTION ):  " + ex);
-            }
-        }
-        context.drawImage(image4,717,252, null);
-        break;
-       }
-       
+
     }
 
     double speed = 4;
@@ -229,11 +233,11 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     public void clearAll() {
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[0].length; j++) {
-                
-                    tiles[i][j] = new FloorTile();
-                
+
+                tiles[i][j] = new FloorTile();
+
             }
-            
+
         }
         mobs.clear();
     }
@@ -250,7 +254,6 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     }
 
     public void loadNext(int level) {
-        //modal.showModal(null);
         mobs.clear();
         switch (curLevel) {
             case 1:
@@ -266,14 +269,21 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                 load("LevelFive.game");
                 break;
             case 5:
-                load("LevelOne.game");
+                load("LevelSix.game");
                 break;
             case 6:
                 load("LevelOne.game");
                 break;
+            case 7:
+                if (curWeapon >= 4) {
+                    load("LevelSix.game");
+                } else {
+                    load("LevelOne.game");
+                }
+                break;
         }
         curLevel++;
-        if (curLevel >= 6) {
+        if (curLevel >= 8) {
             curLevel = 1;
         }
 
@@ -294,6 +304,36 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         return false;
     }
 
+    public boolean isPointInSprite(int x, int y, int sX, int sY) {
+        if (x >= sX - 2 && x <= sX + 32 + 2 && y >= sX - 3 && y <= sX + 64) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean doSpritesCollide(int cX, int cY, int sCx, int sCy) {
+        if (isPointInSprite(cX, cY, sCx, sCy)
+                || isPointInSprite(cX + 32, cY, sCx, sCy)
+                || isPointInSprite(cX, cY + 64, sCx, sCy)
+                || isPointInSprite(cX + 32, cY + 34, sCx, sCy)
+                || isPointInSprite(cX, cY, sCx + 32, sCy)
+                || isPointInSprite(cX + 32, cY, sCx + 32, sCy)
+                || isPointInSprite(cX, cY + 64, sCx + 32, sCy)
+                || isPointInSprite(cX + 32, cY + 64, sCx + 32, sCy)
+                || isPointInSprite(cX, cY, sCx, sCy + 64)
+                || isPointInSprite(cX + 32, cY, sCx, sCy + 64)
+                || isPointInSprite(cX, cY + 64, sCx, sCy + 64)
+                || isPointInSprite(cX + 32, cY + 64, sCx, sCy + 64)
+                || isPointInSprite(cX, cY, sCx + 32, sCy + 64)
+                || isPointInSprite(cX + 32, cY, sCx + 32, sCy + 64)
+                || isPointInSprite(cX, cY + 64, sCx + 32, sCy + 64)
+                || isPointInSprite(cX + 32, cY + 64, sCx + 32, sCy + 64)) {
+            return true;
+        }
+        return false;
+    }
+
     public boolean playerTakeDamage(int x, int y) {
         if (isPointInPlayer(x, y) || isPointInPlayer(x + 32, y) || isPointInPlayer(x, y + 64)
                 || isPointInPlayer(x + 32, y + 64)) {
@@ -306,84 +346,140 @@ public class Panel extends JPanel implements Runnable, MouseListener {
 
     int tickCount = 0;
 
-    private boolean isPointInTile(int x, int y, int tileLeft, int tileTop){
+    private boolean isPointInTile(int x, int y, int tileLeft, int tileTop) {
 
         return false;
     }
 
     public void tick() {
-        for(int i = 0; i < tiles.length; i++){
-            int tileLeft = i *32;
-            for(int j = 0; j < tiles[i].length; j++){
-                Tile currentTile= tiles[i][j];
+        for (int i = 0; i < tiles.length; i++) {
+            int tileLeft = i * 32;
+            for (int j = 0; j < tiles[i].length; j++) {
+                Tile currentTile = tiles[i][j];
                 int tileTop = j * 32;
-                if (isPointInPlayer(i * 32, j * 32) || isPointInPlayer(i * 32 + 32, j * 32) || isPointInPlayer(i * 32, j * 32 + 32)
-                || isPointInPlayer(i * 32 + 32, j * 32 + 32)){
+                if (isPointInPlayer(i * 32, j * 32) || isPointInPlayer(i * 32 + 32, j * 32)
+                        || isPointInPlayer(i * 32, j * 32 + 32)
+                        || isPointInPlayer(i * 32 + 32, j * 32 + 32)) {
 
-
-                    if(tiles[i][j].getClass() == SwordChestTile.class){
+                    if (tiles[i][j].getClass() == SwordChestTile.class) {
                         curWeapon++;
                         tiles[i][j] = new FloorTile();
 
                     }
-                    if(tiles[i][j].getClass() == TransitionTile.class && dude.hasKey){
+                    if (tiles[i][j].getClass() == TransitionTile.class && dude.hasKey) {
                         loadNext(curLevel);
                     }
 
-                    int weaponTipX = 0;
-                    int weaponTipY = 0;
-
-                    //See If the player is attacking, and the tile we're checking is wood
-                    if(dude.isAttacking && currentTile.getClass() == WoodTile.class){
-                        //See if the sword of the player is inside the wood tile
-                       if(isPointInTile(weaponTipX, weaponTipY, tileLeft, tileTop))   {
-                            // the player has stabbed a wood tile, let's turn it into a floor tile
-                            tiles[i][j] = new FloorTile();
-                      }
-                    }
-
-                    if((tileLeft >= placeX - 96 && tileLeft <= placeX + 96 && tileTop >= placeY - 96 && tileTop <= placeY + 128) 
-                    || (tileLeft + 96 >= placeX - 96 && tileLeft + 96 <= placeX + 96 && tileTop >= placeY - 96 && tileTop <= placeY + 128) 
-                    || (tileLeft >= placeX - 96 && tileLeft <= placeX + 96 && tileTop + 96 >= placeY - 96 && tileTop + 96 <= placeY + 128) 
-                    || (tileLeft + 96 >= placeX - 96 && tileLeft + 96<= placeX + 96 && tileTop + 96 >= placeY - 96 && tileTop + 96 <= placeY + 128)){
-                        if(tiles[i][j].getClass() == WoodTile.class && dude.isAttacking)
-                        tiles[i][j] = new FloorTile();
-                    }
+                    /*
+                     * 
+                     * if((tileLeft >= placeX - 96 && tileLeft <= placeX + 96 && tileTop >= placeY -
+                     * 96 && tileTop <= placeY + 128)
+                     * || (tileLeft + 96 >= placeX - 96 && tileLeft + 96 <= placeX + 96 && tileTop
+                     * >= placeY - 96 && tileTop <= placeY + 128)
+                     * || (tileLeft >= placeX - 96 && tileLeft <= placeX + 96 && tileTop + 96 >=
+                     * placeY - 96 && tileTop + 96 <= placeY + 128)
+                     * || (tileLeft + 96 >= placeX - 96 && tileLeft + 96<= placeX + 96 && tileTop +
+                     * 96 >= placeY - 96 && tileTop + 96 <= placeY + 128)){
+                     * if(tiles[i][j].getClass() == WoodTile.class && dude.isAttacking)
+                     * tiles[i][j] = new FloorTile();
+                     * }
+                     */
 
                 }
             }
         }
-        
-        if(listener.healing && dude.hp < 100){
+
+        int weaponTipX = 0;
+        int weaponTipY = 0;
+        int swordLen = 15;
+        switch (dude.playerDirection) {
+            case Left:
+                // left tip should be player x - swordLen
+                // player y = should be halfway between top and bottom of player
+                weaponTipX = placeX - swordLen;
+                weaponTipY = placeY + (PLAYER_HEIGHT / 2);
+                break;
+            case Right:
+                weaponTipX = placeX + PLAYER_WIDTH + swordLen;
+                weaponTipY = placeY + (PLAYER_HEIGHT / 2);
+                break;
+            case Up:
+                weaponTipX = placeX + (PLAYER_WIDTH / 2);
+                weaponTipY = placeY - swordLen;
+                break;
+            case Down:
+                weaponTipX = placeX + (PLAYER_WIDTH / 2);
+                weaponTipY = placeY + PLAYER_HEIGHT + swordLen;
+                break;
+        }
+
+        // what tile is the sword in?
+        int tileX = weaponTipX / TILE_WIDTH;
+        int tileY = weaponTipY / TILE_HEIGHT;
+        if (dude.isAttacking) {
+            if (tileX >= 0 && tileX < tiles.length && tileY >= 0 && tileY < tiles.length) {
+                Tile currentTile = tiles[tileX][tileY];
+                // See If the player is attacking, and the tile we're checking is wood
+                if (currentTile.getClass() == WoodTile.class) {
+                    tiles[tileX][tileY] = new FloorTile();
+                }
+                if (tiles[tileX-1][tileY-1].getClass() == WoodTile.class) {
+                    tiles[tileX-1][tileY-1] = new FloorTile();
+                }
+                if (tiles[tileX][tileY-1].getClass() == WoodTile.class) {
+                    tiles[tileX][tileY-1] = new FloorTile();
+                }
+                if (tiles[tileX+1][tileY-1].getClass() == WoodTile.class) {
+                    tiles[tileX+1][tileY-1] = new FloorTile();
+                }
+                if (tiles[tileX-1][tileY].getClass() == WoodTile.class) {
+                    tiles[tileX-1][tileY] = new FloorTile();
+                }
+                if (tiles[tileX+1][tileY].getClass() == WoodTile.class) {
+                    tiles[tileX+1][tileY] = new FloorTile();
+                }
+                if (tiles[tileX-1][tileY+1].getClass() == WoodTile.class) {
+                    tiles[tileX-1][tileY+1] = new FloorTile();
+                }
+                if (tiles[tileX][tileY+1].getClass() == WoodTile.class) {
+                    tiles[tileX][tileY+1] = new FloorTile();
+                }
+                if (tiles[tileX+1][tileY+1].getClass() == WoodTile.class) {
+                    tiles[tileX+1][tileY+1] = new FloorTile();
+                }
+
+            }
+        }
+
+        if (listener.healing && dude.hp < 100) {
             dude.hp += 2;
         }
         if (dude.hp <= 0) {
-            load("LevelSix.game ");
+            load("LevelSeven.game ");
             dude.hasKey = true;
             mobs.clear();
             dude.hp = 100;
-            curLevel = 6;
+            curLevel = 7;
         }
         tickCount++;
         if (listener.attacking) {
             if (Math.abs(dude.tickCount) - dude.lastAttackTick > 10) {
                 play("images/swordSwoosh.wav", false);
             }
-            dude.attack(mobs, placeX, placeY);
+            dude.attack(mobs, placeX, placeY, curWeapon);
         }
 
         for (int i = mobs.size() - 1; i >= 0; i--) {
             Mob curMob = mobs.get(i);
-            if(curMob.getClass() == Fireball.class){
+            if (curMob.getClass() == Fireball.class) {
             }
             if (curMob.getClass() == Fireball.class && playerTakeDamage(curMob.x, curMob.y)) {
 
                 mobs.remove(i);
-                if(curMob.isFast){
+                if (curMob.isFast) {
                     dude.hp -= 60;
-                }
-                else{
-                    dude.hp /=2;
+                } else {
+                    dude.hp /= 2;
                 }
 
             }
@@ -391,7 +487,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                     && (curMob.getClass() == Guard.class || curMob.getClass() == Princess.class)
                     && tickCount % 12 == 0) {
                 dude.hp -= 20;
-                if(curMob.getClass() == Princess.class){
+                if (curMob.getClass() == Princess.class) {
                     dude.hp -= 10;
                 }
 
@@ -450,8 +546,11 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         if (listener.downing) {
             dude.playerDirection = Direction.Down;
         }
+        boolean princessFound = false;
         for (int i = 0; i < mobs.size(); i++) {
-            if (mobs.get(i).getClass() == Princess.class) {
+            Mob curMob = mobs.get(i);
+            if (curMob.getClass() == Princess.class) {
+                princessFound = true;
                 if (tickCount % 100 == 0) {
                     // finds distance between princess and player(to shoot a fireball)
                     double dx = placeX + 15 - mobs.get(i).x;
@@ -474,12 +573,56 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                 }
             }
         }
-        if(dude.hp > 100){
+        if (!princessFound && curLevel == 6) {
+            // princess is dead
+            if (!hasPlayedCredits) {
+                hasPlayedCredits = true;
+                curCount = tickCount;
+
+            }
+        }
+        if (dude.hp > 100) {
             dude.hp = 100;
         }
+        if (tickCount >= curCount + 100) {
+            CutSceneModal m = new CutSceneModal();
+            m.showModal(MainThing.gameFrame, "src/images/credits.mp4");
+        }
+        for (int i = 0; i < mobs.size(); i++) {
+            for (int j = 0; j < mobs.size(); j++) {
+                if (i == j) {
+                    continue;
+                }
+
+                boolean removeMobs = false;
+
+                if (mobs.get(i).getClass() == Guard.class && mobs.get(j).getClass() == Guard.class
+                        && doSpritesCollide(mobs.get(i).x, mobs.get(i).y, mobs.get(j).x, mobs.get(j).y)) {
+                    Guard2 guard2 = new Guard2(mobs.get(i).x, mobs.get(i).y);
+                    removeMobs = true;
+                    mobs.add(guard2);
+                }
+                if (mobs.get(i).getClass() == Guard2.class && mobs.get(j).getClass() == Guard2.class
+                        && doSpritesCollide(mobs.get(i).x, mobs.get(i).y, mobs.get(j).x, mobs.get(j).y)) {
+                    Guard3 guard3 = new Guard3(mobs.get(i).x, mobs.get(i).y);
+                    removeMobs = true;
+                    mobs.add(guard3);
+                }
+
+                if (removeMobs) {
+                    if (j > i) {
+                        mobs.remove(j);
+                        mobs.remove(i);
+                        break;
+                    } else {
+                        mobs.remove(i);
+                        mobs.remove(j);
+                        break;
+                    }
+                }
+            }
+        }
     }
-
-
 
     @Override
     public void run() {
@@ -517,10 +660,9 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             clip = AudioSystem.getClip();
             clip.open(audioInputStream);
 
-            if(loop){
+            if (loop) {
                 clip.loop(Clip.LOOP_CONTINUOUSLY);
-            }
-            else{
+            } else {
                 clip.start();
             }
         } catch (Exception e) {
@@ -582,7 +724,6 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                 placeTile = new HealthTile();
                 break;
 
-
         }
         if (placeTile != null) {
             tiles[(int) (x / 32)][(int) (y / 32)] = placeTile;
@@ -639,9 +780,9 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             case "SwordChestTile":
                 placeTile = new SwordChestTile();
                 break;
-                case "HealthTile":
-                    placeTile = new HealthTile();
-                    break;
+            case "HealthTile":
+                placeTile = new HealthTile();
+                break;
 
         }
         if (placeTile != null) {
@@ -696,12 +837,12 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             case "StartTile":
                 placeTile = new StartTile();
                 break;
-                case "SwordChestTile":
-                    placeTile = new SwordChestTile();
-                    break;
-                    case "HealthTile":
-                        placeTile = new HealthTile();
-                        break;
+            case "SwordChestTile":
+                placeTile = new SwordChestTile();
+                break;
+            case "HealthTile":
+                placeTile = new HealthTile();
+                break;
 
         }
         if (placeTile != null) {
@@ -766,12 +907,12 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             case "StartTile":
                 placeTile = new StartTile();
                 break;
-                case "SwordChestTile":
-                    placeTile = new SwordChestTile();
-                    break;
-                    case "HealthTile":
-                        placeTile = new HealthTile();
-                        break;
+            case "SwordChestTile":
+                placeTile = new SwordChestTile();
+                break;
+            case "HealthTile":
+                placeTile = new HealthTile();
+                break;
 
         }
         if (placeTile != null) {

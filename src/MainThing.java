@@ -1,6 +1,8 @@
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
+import javax.swing.text.GapContent;
+
 import java.awt.*;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
@@ -39,32 +41,37 @@ public class MainThing {
         // Makes menu
         MenuBar bar = new MenuBar();
         Menu file = new Menu("File");
-        // Creates 5 seperate save files for maps and adds to menu
-        MenuItem SaveItem1 = new MenuItem("Save1");
+       
+        // Creates 7 seperate save files for maps and adds to menu
+        MenuItem SaveItem1 = new MenuItem("Save 1");
         file.add(SaveItem1);
-        MenuItem SaveItem2 = new MenuItem("Save2");
+        MenuItem SaveItem2 = new MenuItem("Save 2");
         file.add(SaveItem2);
-        MenuItem SaveItem3 = new MenuItem("Save3");
+        MenuItem SaveItem3 = new MenuItem("Save 3");
         file.add(SaveItem3);
-        MenuItem SaveItem4 = new MenuItem("Save4");
+        MenuItem SaveItem4 = new MenuItem("Save 4");
         file.add(SaveItem4);
-        MenuItem SaveItem5 = new MenuItem("Save5");
+        MenuItem SaveItem5 = new MenuItem("Save 5");
         file.add(SaveItem5);
-        MenuItem SaveItem6 = new MenuItem("Save G.O.");
+        MenuItem SaveItem6 = new MenuItem("Save 6");
         file.add(SaveItem6);
+        MenuItem SaveItem7 = new MenuItem("Save G.O.");
+        file.add(SaveItem7);
         // Creates 5 ways to load and adds to menu
-        MenuItem LoadItem1 = new MenuItem("Load1");
+        MenuItem LoadItem1 = new MenuItem("Load 1");
         file.add(LoadItem1);
-        MenuItem LoadItem2 = new MenuItem("Load2");
+        MenuItem LoadItem2 = new MenuItem("Load 2");
         file.add(LoadItem2);
-        MenuItem LoadItem3 = new MenuItem("Load3");
+        MenuItem LoadItem3 = new MenuItem("Load 3");
         file.add(LoadItem3);
-        MenuItem LoadItem4 = new MenuItem("Load4");
+        MenuItem LoadItem4 = new MenuItem("Load 4");
         file.add(LoadItem4);
-        MenuItem LoadItem5 = new MenuItem("Load5");
+        MenuItem LoadItem5 = new MenuItem("Load 5");
         file.add(LoadItem5);
-        MenuItem LoadItem6 = new MenuItem("Load G.O.");
+        MenuItem LoadItem6 = new MenuItem("Load 6");
         file.add(LoadItem6);
+        MenuItem LoadItem7 = new MenuItem("Load G.O.");
+        file.add(LoadItem7);
         // Adds function to the menu items
         SaveItem1.addActionListener(action -> myPanel.save("LevelOne.game"));
         SaveItem2.addActionListener(action -> myPanel.save("LevelTwo.game"));
@@ -72,6 +79,7 @@ public class MainThing {
         SaveItem4.addActionListener(action -> myPanel.save("LevelFour.game"));
         SaveItem5.addActionListener(action -> myPanel.save("LevelFive.game"));
         SaveItem6.addActionListener(action -> myPanel.save("LevelSix.game"));
+        SaveItem7.addActionListener(action -> myPanel.save("LevelSeven.game"));
 
         LoadItem1.addActionListener(action -> myPanel.load("LevelOne.game"));
         LoadItem1.addActionListener(action -> myPanel.curLevel = 1);
@@ -85,7 +93,8 @@ public class MainThing {
         LoadItem5.addActionListener(action -> myPanel.curLevel = 5);
         LoadItem6.addActionListener(action -> myPanel.load("LevelSix.game"));
         LoadItem6.addActionListener(action -> myPanel.curLevel = 6);
-        LoadItem6.addActionListener(action -> myPanel.giveKey());
+        LoadItem7.addActionListener(action -> myPanel.load("LevelSeven.game"));
+        LoadItem7.addActionListener(action -> myPanel.curLevel = 7);
         Menu main = new Menu("Tiles");
         bar.add(file);
         
@@ -139,7 +148,15 @@ public class MainThing {
         main.add(HealthTileItem);
         HealthTileItem.addActionListener(action -> myPanel.setMenuTile(HealthTile.class));
 
-
+        // add an about menu
+        Menu about = new Menu("About");
+        bar.add(about);
+        MenuItem aboutGame = new MenuItem("About Game");
+        about.add(aboutGame);
+        aboutGame.addActionListener(action -> {
+            CutSceneModal m = new CutSceneModal();
+            m.showModal(gameFrame, "src/images/openingscene.mp4");
+        });
         myFrame.setMenuBar(bar);
 
         // Makes continuous game loop that is constantly calling the "run" function on the panel

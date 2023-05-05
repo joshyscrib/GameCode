@@ -15,7 +15,7 @@ Image image;
             java.net.URL img = getClass().getClassLoader().getResource("images/healthPotion.png");
             try{
             image = ImageIO.read(img);
-            System.out.println("LOADING IMAGE BEEP BOOP");
+    
             }
             catch(IOException ex){
                 System.out.println("EXCEPTION ):  " + ex);
@@ -43,11 +43,38 @@ Image image;
         }
 
         
-        if(dude.hp <= 20 || curLevel == 6){
+        if(dude.hp <= 20 || curLevel == 7){
             context.setColor(lowHpColor);
             context.fillRect(0,0,704,704);
         }
-        context.setColor(Color.YELLOW);
-       context.drawRect(placeX-32,placeY-32,64 + 32,96 + 32);
+       if(dude.isAttacking){
+        switch(curWeapon){
+            case 1:
+            switch(dude.playerDirection){
+                case Up:
+                context.fillRect(placeX + 15, placeY - 25, 10, 30);
+                    break;
+                case Left:
+                context.fillRect(placeX,placeY + 27,-30,10);
+                    break;
+                case Down:
+                context.fillRect(placeX + 15,placeY + 63,10,30);
+                    break;
+                case Right:
+                context.fillRect(placeX + 30,placeY + 30,30,10);
+                    break;
+            }
+            break;
+            case 2:
+
+            break;
+            case 3:
+
+            break;
+            case 4:
+
+            break;
+        }
+       }
     }
 }

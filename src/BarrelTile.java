@@ -10,7 +10,7 @@ public class BarrelTile extends Tile{
             URL img = getClass().getClassLoader().getResource("images/barrelTile.png");
             try{
             image = ImageIO.read(img);
-            System.out.println("LOADING IMAGE BEEP BOOP");
+
             }
             catch(IOException ex){
                 System.out.println("EXCEPTION ):  " + ex);

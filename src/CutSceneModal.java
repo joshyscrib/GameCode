@@ -12,7 +12,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
@@ -20,25 +25,45 @@ import javafx.scene.media.MediaView;
 public class CutSceneModal {
     Image fireballImg;
 
-    public void showModal(JFrame parent){
+    public void showModal(JFrame parent, String imagePath){
 
-        
+        com.sun.javafx.application.PlatformImpl.startup(()->{});
         JDialog modelDialog = new JDialog(MainThing.gameFrame, "do you want to have a bad time?", true);
-        JPanel panel = new JPanel();
-        panel.setSize(600,400);
-        JLabel lbl = new JLabel("Hey");
-        lbl.setSize(400,300);
-        panel.add(lbl);
-        File videoFile = new File("");
-        Media m = new Media(videoFile.toURI().toString());
-        MediaPlayer player = new MediaPlayer(m);
-        MediaView viewer = new MediaView(player);
 
-        JFXPanel jfxPanel = new JFXPanel();
-        panel.add(jfxPanel);
+        JPanel panel = new JPanel();
+        panel.setSize(800,600);
+        Platform.setImplicitExit(false);
+        Platform.runLater(()-> {
+            File videoFile = new File(imagePath);
+            String uri = videoFile.toURI().toString();
+            Media m = new Media(uri);
+            MediaPlayer player = new MediaPlayer(m);
+            player.setAutoPlay(true);
+            MediaView viewer = new MediaView(player);
+            viewer.setFitWidth(600);
+            viewer.setFitHeight(400);
+    
+            viewer.setPreserveRatio(true);;
+            player.setOnEndOfMedia(() -> {
+               modelDialog.dispose();
+            });
+ 
+            JFXPanel jfxPanel = new JFXPanel();
+            
+            Group box = new Group();
+            Scene s = new Scene(box, 380,275);
+            jfxPanel.setScene(s);
+    
+        
+            
+            ((Group) s.getRoot()).getChildren().add(viewer);
+            modelDialog.add(jfxPanel);
+        });
+      
+       
      
-        //modelDialog.add(panel);
-        modelDialog.setSize(600,400);
+        modelDialog.setPreferredSize(new Dimension(520, 425));
+
         modelDialog.setLocation(300,300);
         modelDialog.pack();
         modelDialog.setVisible(true);
