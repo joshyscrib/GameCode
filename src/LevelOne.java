@@ -8,13 +8,46 @@ public class LevelOne extends Panel{
         super(filename);
         //TODO Auto-generated constructor stub
     }
-Image image;
+    Image hImage;
+    Image cImage;
+    Image pImage;
+    Image iImage;
     @Override
     public void paint(Graphics g){
-        if(image == null){
+        if(hImage == null){
             java.net.URL img = getClass().getClassLoader().getResource("images/healthPotion.png");
             try{
-            image = ImageIO.read(img);
+            hImage = ImageIO.read(img);
+    
+            }
+            catch(IOException ex){
+                System.out.println("EXCEPTION ):  " + ex);
+            }
+        }
+        if(cImage == null){
+            java.net.URL img = getClass().getClassLoader().getResource("images/croissant.png");
+            try{
+                cImage = ImageIO.read(img);
+    
+            }
+            catch(IOException ex){
+                System.out.println("EXCEPTION ):  " + ex);
+            }
+        }
+        if(pImage == null){
+            java.net.URL img = getClass().getClassLoader().getResource("images/pomegranate.png");
+            try{
+                pImage = ImageIO.read(img);
+    
+            }
+            catch(IOException ex){
+                System.out.println("EXCEPTION ):  " + ex);
+            }
+        }
+        if(iImage == null){
+            java.net.URL img = getClass().getClassLoader().getResource("images/Icee.png");
+            try{
+                iImage = ImageIO.read(img);
     
             }
             catch(IOException ex){
@@ -32,7 +65,19 @@ Image image;
                     if(items[x][y] != null){
                         if(items[x][y].getClass() == HealthPotion.class){
                             context.setColor(Color.RED);
-                            context.drawImage(image, x * 32, y * 32, null);
+                            context.drawImage(hImage, x * 32, y * 32, 32, 32, null);
+                        }
+                        if(items[x][y].getClass() == Croissant.class){
+                            context.setColor(Color.RED);
+                            context.drawImage(cImage, x * 32, y * 32, 32, 32, null);
+                        }
+                        if(items[x][y].getClass() == Pomegranate.class){
+                            context.setColor(Color.RED);
+                            context.drawImage(pImage, x * 32, y * 32, 32, 32, null);
+                        }
+                        if(items[x][y].getClass() == Icee.class){
+                            context.setColor(Color.RED);
+                            context.drawImage(iImage, x * 32, y * 32, 32, 32, null);
                         }
                     }
             }

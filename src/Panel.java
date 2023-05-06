@@ -114,6 +114,15 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                 if (tiles[i][j].getClass() == HealthTile.class) {
                     items[i][j] = new HealthPotion();
                 }
+                if (tiles[i][j].getClass() == CroissantTile.class) {
+                    items[i][j] = new Croissant();
+                }
+                if (tiles[i][j].getClass() == PomegranateTile.class) {
+                    items[i][j] = new Pomegranate();
+                }
+                if (tiles[i][j].getClass() == IceeTile.class) {
+                    items[i][j] = new Icee();
+                }
 
             }
         }
@@ -129,6 +138,15 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             if (items[X][Y] != null) {
                 if (items[X][Y].getClass() == HealthPotion.class && dude.hp < 100) {
                     dude.hp += 25;
+                    items[X][Y] = null;
+                }
+                if (items[X][Y] != null && items[X][Y].getClass() == Croissant.class) {
+                    items[X][Y] = null;
+                }
+                if (items[X][Y] != null && items[X][Y].getClass() == Pomegranate.class) {
+                    items[X][Y] = null;
+                }
+                if (items[X][Y] != null && items[X][Y].getClass() == Icee.class  ) {
                     items[X][Y] = null;
                 }
 
@@ -580,7 +598,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
 
             }
         }
-        if (dude.hp < 100) {
+        if (dude.hp > 100) {
             dude.hp = 100;
         }
         if (tickCount >= curCount + 100) {
@@ -722,6 +740,15 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             case "HealthTile":
                 placeTile = new HealthTile();
                 break;
+            case "CroissantTile":
+                placeTile = new CroissantTile();
+                break;
+            case "PomegranateTile":
+                placeTile = new PomegranateTile();
+                break;
+            case "IceeTile":
+                placeTile = new IceeTile();
+                break;
 
         }
         if (placeTile != null) {
@@ -782,7 +809,15 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             case "HealthTile":
                 placeTile = new HealthTile();
                 break;
-
+            case "CroissantTile":
+                placeTile = new CroissantTile();
+                break;
+            case "PomegranateTile":
+                placeTile = new PomegranateTile();
+                break;
+            case "IceeTile":
+                placeTile = new IceeTile();
+                break;
         }
         if (placeTile != null) {
             tiles[(int) (x / 32)][(int) (y / 32)] = placeTile;
@@ -842,7 +877,15 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             case "HealthTile":
                 placeTile = new HealthTile();
                 break;
-
+            case "CroissantTile":
+                placeTile = new CroissantTile();
+                break;
+            case "PomegranateTile":
+                placeTile = new PomegranateTile();
+                break;
+            case "IceeTile":
+                placeTile = new IceeTile();
+                break;
         }
         if (placeTile != null) {
             tiles[(int) (x / 32)][(int) (y / 32)] = placeTile;
@@ -912,7 +955,15 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             case "HealthTile":
                 placeTile = new HealthTile();
                 break;
-
+            case "CroissantTile":
+                placeTile = new CroissantTile();
+                break;
+            case "PomegranateTile":
+                placeTile = new PomegranateTile();
+                break;
+            case "IceeTile":
+                placeTile = new IceeTile();
+                break;
         }
         if (placeTile != null) {
             tiles[(int) (x / 32)][(int) (y / 32)] = placeTile;

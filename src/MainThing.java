@@ -147,6 +147,15 @@ public class MainThing {
         MenuItem HealthTileItem = new MenuItem("Health Potion");
         main.add(HealthTileItem);
         HealthTileItem.addActionListener(action -> myPanel.setMenuTile(HealthTile.class));
+        MenuItem CroissantTileItem = new MenuItem("Croissant");
+        main.add(CroissantTileItem);
+        CroissantTileItem.addActionListener(action -> myPanel.setMenuTile(CroissantTile.class));
+        MenuItem PomegranateTileItem = new MenuItem("Pomegranate");
+        main.add(PomegranateTileItem);
+        PomegranateTileItem.addActionListener(action -> myPanel.setMenuTile(PomegranateTile.class));
+        MenuItem IceeTileItem = new MenuItem("Icee");
+        main.add(IceeTileItem);
+        IceeTileItem.addActionListener(action -> myPanel.setMenuTile(IceeTile.class));
 
         // add an about menu
         Menu about = new Menu("About");

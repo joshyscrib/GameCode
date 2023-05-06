@@ -29,7 +29,7 @@ public class Guard2 extends Mob {
                 break;
         }
         URL img1 = getClass().getClassLoader().getResource("images/guard2-1.png");
-        URL img2 = getClass().getClassLoader().getResource("images/guard2-1.png");
+        URL img2 = getClass().getClassLoader().getResource("images/guard2-2.png");
         try {
             guardImages[0] = ImageIO.read(img1);
             guardImages[1] = ImageIO.read(img2);
