@@ -10,7 +10,6 @@ public class Player {
     Direction playerDirection = Direction.Right;
     int tickCount = 0;
     private int animationIndex = 0;
-    private boolean UDindex = false;
     int hp = 100;
     int atk = 8;
     int def = 0;
@@ -48,13 +47,13 @@ public class Player {
     }
 
     public void tick() {
-        UDindex = !UDindex;
-        if(UDindex){
-            udindex = 1;
+        if(tickCount % 9 == 0){
+            udindex++;
+            if(udindex >= uPlayerImages.length){
+                udindex = 0;
+            }
         }
-        else{
-            udindex = 0;
-        }
+        
         tickCount++;
         if (tickCount % 9 == 0) {
             animationIndex++;

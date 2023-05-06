@@ -44,7 +44,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     boolean hasPlayedCredits = false;
     Color lowHpColor = new Color(250, 5, 5, 50);
     int curCount = 999999999;
-
+    
     // here is a comment
     public void setMenuTile(Class c) {
         menuTile = c;
@@ -67,7 +67,6 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         m.showModal(MainThing.gameFrame, "src/images/openingscene.mp4");
         load("LevelOne.game");
         play("images/dungeonMusic.wav", true);
-
     }
 
     public void save(String place) {
@@ -581,7 +580,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
 
             }
         }
-        if (dude.hp > 100) {
+        if (dude.hp < 100) {
             dude.hp = 100;
         }
         if (tickCount >= curCount + 100) {
