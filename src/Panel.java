@@ -434,34 +434,34 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         int tileX = weaponTipX / TILE_WIDTH;
         int tileY = weaponTipY / TILE_HEIGHT;
         if (dude.isAttacking) {
-            if (tileX >= 0 && tileX < tiles.length && tileY >= 0 && tileY < tiles.length) {
+            if (tileX - 1 >= 0 && tileX + 1 < tiles.length && tileY - 1 >= 0 && tileY + 1 < tiles.length) {
                 Tile currentTile = tiles[tileX][tileY];
                 // See If the player is attacking, and the tile we're checking is wood
-                if (currentTile.getClass() == WoodTile.class) {
+                if (currentTile != null && currentTile.getClass() == WoodTile.class) {
                     tiles[tileX][tileY] = new FloorTile();
                 }
-                if (tiles[tileX-1][tileY-1].getClass() == WoodTile.class) {
+                if (tiles[tileX-1][tileY-1] != null && tiles[tileX-1][tileY-1].getClass() == WoodTile.class) {
                     tiles[tileX-1][tileY-1] = new FloorTile();
                 }
-                if (tiles[tileX][tileY-1].getClass() == WoodTile.class) {
+                if (tiles[tileX][tileY-1] != null && tiles[tileX][tileY-1].getClass() == WoodTile.class) {
                     tiles[tileX][tileY-1] = new FloorTile();
                 }
-                if (tiles[tileX+1][tileY-1].getClass() == WoodTile.class) {
+                if (tiles[tileX+1][tileY-1] != null && tiles[tileX+1][tileY-1].getClass() == WoodTile.class) {
                     tiles[tileX+1][tileY-1] = new FloorTile();
                 }
-                if (tiles[tileX-1][tileY].getClass() == WoodTile.class) {
+                if (tiles[tileX-1][tileY] != null && tiles[tileX-1][tileY].getClass() == WoodTile.class) {
                     tiles[tileX-1][tileY] = new FloorTile();
                 }
-                if (tiles[tileX+1][tileY].getClass() == WoodTile.class) {
+                if (tiles[tileX+1][tileY] != null && tiles[tileX+1][tileY].getClass() == WoodTile.class) {
                     tiles[tileX+1][tileY] = new FloorTile();
                 }
-                if (tiles[tileX-1][tileY+1].getClass() == WoodTile.class) {
+                if (tiles[tileX-1][tileY+1]!= null && tiles[tileX-1][tileY+1].getClass() == WoodTile.class) {
                     tiles[tileX-1][tileY+1] = new FloorTile();
                 }
-                if (tiles[tileX][tileY+1].getClass() == WoodTile.class) {
+                if (tiles[tileX][tileY+1] != null && tiles[tileX][tileY+1].getClass() == WoodTile.class) {
                     tiles[tileX][tileY+1] = new FloorTile();
                 }
-                if (tiles[tileX+1][tileY+1].getClass() == WoodTile.class) {
+                if (tiles[tileX+1][tileY+1] != null && tiles[tileX+1][tileY+1].getClass() == WoodTile.class) {
                     tiles[tileX+1][tileY+1] = new FloorTile();
                 }
 
