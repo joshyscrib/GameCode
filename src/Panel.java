@@ -501,13 +501,29 @@ public class Panel extends JPanel implements Runnable, MouseListener {
 
             }
             if (playerTakeDamage(curMob.x, curMob.y)
-                    && (curMob.getClass() == Guard.class || curMob.getClass() == Princess.class)
+                    && (curMob.getClass() == Guard.class || curMob.getClass() == Princess.class || curMob.getClass() == Guard2.class || curMob.getClass() == Guard3.class)
                     && tickCount % 12 == 0) {
                 dude.hp -= 20;
                 if (curMob.getClass() == Princess.class) {
                     dude.hp -= 10;
                 }
-
+                if(curMob.getClass() == Guard2.class){
+                    dude.hp -= 5;
+                }
+                if(curMob.getClass() == Guard3.class){
+                    dude.hp -= 15;
+                }
+                switch(curWeapon){
+                    case 2:
+                    dude.hp += 5;
+                        break;
+                    case 3:
+                    dude.hp += 12;
+                        break;
+                    case 4:
+                    dude.hp += 17;
+                        break;
+                }
             }
             curMob.tick(tiles, dude, mobs);
             if (curMob.isDead()) {

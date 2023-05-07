@@ -7,7 +7,7 @@ public class StartTile extends Tile{
     @Override
     public void drawTile(Graphics2D context, int x, int y){
         if(image == null){
-            URL img = getClass().getClassLoader().getResource("images/startTile.png");
+            URL img = getClass().getClassLoader().getResource("images/floorTile.png");
             try{
             image = ImageIO.read(img);
 

@@ -9,7 +9,7 @@ public class PomegranateTile extends Tile{
         super.drawTile(context, x, y);
         context.drawImage(image, x, y, null);
         if(image == null){
-        URL img = getClass().getClassLoader().getResource("images/healthTile.png");
+        URL img = getClass().getClassLoader().getResource("images/floorTile.png");
         try{
         image = ImageIO.read(img);
 
