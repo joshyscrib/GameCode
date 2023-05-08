@@ -16,7 +16,7 @@
             "request": "launch",
             "mainClass": "MainThing",
             "projectName": "JoshLearn_14eb4d89",
-            "vmArgs": "--module-path C:\\Users\\josht\\Downloads\\openjfx-20_windows-x64_bin-sdk.zip\\javafx-sdk-20\\lib --add-modules javafx.controls, javafx.fml"
+       
         }
     ]
 }

@@ -65,9 +65,14 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             }
         }
         addMouseListener(this);
-
-        CutSceneModal m = new CutSceneModal();
+        try {
+            CutSceneModal m = new CutSceneModal();
         m.showModal(MainThing.gameFrame, "src/images/openingscene.mp4");
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        
+        
         load("LevelOne.game");
         play("images/dungeonMusic.wav", true);
     }
@@ -665,16 +670,20 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             if (!hasPlayedCredits) {
                 hasPlayedCredits = true;
                 curCount = tickCount;
-
+    clip.stop();
             }
         }
         if (dude.hp > 100) {
             dude.hp = 100;
         }
         if (tickCount >= curCount + 20) {
-            clip.stop();
-            CutSceneModal m = new CutSceneModal();
+            try {
+                CutSceneModal m = new CutSceneModal();
             m.showModal(MainThing.gameFrame, "src/images/credits.mp4");
+            } catch (Exception e) {
+                // TODO: handle exception
+            }
+            
         }
         for (int i = 0; i < mobs.size(); i++) {
             for (int j = 0; j < mobs.size(); j++) {
