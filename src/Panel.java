@@ -5,6 +5,8 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.JPanel;
+import javax.swing.SpinnerDateModel;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.awt.event.*;
@@ -24,7 +26,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     private static int PLAYER_WIDTH = 64;
     private static int TILE_WIDTH = 32;
     private static int TILE_HEIGHT = 32;
-
+    static boolean hasPomegranate = false;
     GameKeyListener listener = new GameKeyListener(this);
     public static int xTiles = 22;
     public static int yTiles = 22;
@@ -44,7 +46,8 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     boolean hasPlayedCredits = false;
     Color lowHpColor = new Color(250, 5, 5, 50);
     int curCount = 999999999;
-    
+    int pomEndTime;
+    int spdEndTime;
     // here is a comment
     public void setMenuTile(Class c) {
         menuTile = c;
@@ -141,9 +144,13 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                     items[X][Y] = null;
                 }
                 if (items[X][Y] != null && items[X][Y].getClass() == Croissant.class) {
+                    speed = 6;
+                    spdEndTime = tickCount + 400;
                     items[X][Y] = null;
                 }
                 if (items[X][Y] != null && items[X][Y].getClass() == Pomegranate.class) {
+                    hasPomegranate = true;
+                    pomEndTime = tickCount + 200;
                     items[X][Y] = null;
                 }
                 if (items[X][Y] != null && items[X][Y].getClass() == Icee.class  ) {
@@ -329,7 +336,47 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         return false;
     }
 
+    int SPRITE_WIDTH = 32;
+    int SPRITE_HEIGHT = 64;
+    public void revertSpeed(){
+        speed = 4;
+    }
+    public void revertStrength(){
+        dude.atk = 8;
+    }
+    public void revertShield(){
+        
+    }
+    public boolean isPointInSprite2(int x, int y, int spriteX, int spriteY){
+
+        if(x >= spriteX && x < spriteX + SPRITE_WIDTH && y >= spriteY && y < spriteY + SPRITE_HEIGHT){
+            return true;
+        }
+
+        return false;
+    }
+
     public boolean doSpritesCollide(int cX, int cY, int sCx, int sCy) {
+        // see if each corner of sprite 1 is within the rectangle of sprite2, then check the opposite
+        if(isPointInSprite2(cX, cY, sCx, sCy) || // top left
+        isPointInSprite2(cX + SPRITE_WIDTH, cY, sCx, sCy) || // top right
+        isPointInSprite2(cX, cY + SPRITE_HEIGHT, sCx, sCy) || // bottom left
+        isPointInSprite2(cX + SPRITE_WIDTH, cY + SPRITE_HEIGHT, sCx, sCy)){ // bottom right
+            return true;
+        }
+
+        // check the other sprite
+        if(isPointInSprite2(sCx, sCy, cX, cY) || // top left
+        isPointInSprite2(sCx + SPRITE_WIDTH, sCy, cX, cY) || // top right
+        isPointInSprite2(sCx, sCy + SPRITE_HEIGHT, cX, cY) || // bottom left
+        isPointInSprite2(sCx + SPRITE_WIDTH, sCy + SPRITE_HEIGHT, cX, cY)){ // bottom right
+            return true;
+        }
+
+
+
+        /* 
+
         if (isPointInSprite(cX, cY, sCx, sCy)
                 || isPointInSprite(cX + 32, cY, sCx, sCy)
                 || isPointInSprite(cX, cY + 64, sCx, sCy)
@@ -348,6 +395,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                 || isPointInSprite(cX + 32, cY + 64, sCx + 32, sCy + 64)) {
             return true;
         }
+        */
         return false;
     }
 
@@ -369,6 +417,12 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     }
 
     public void tick() {
+        if(tickCount >= pomEndTime){
+            revertStrength();
+        }
+        if(tickCount >= spdEndTime){
+            revertSpeed();
+        }
         for (int i = 0; i < tiles.length; i++) {
             int tileLeft = i * 32;
             for (int j = 0; j < tiles[i].length; j++) {
@@ -617,7 +671,8 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         if (dude.hp > 100) {
             dude.hp = 100;
         }
-        if (tickCount >= curCount + 100) {
+        if (tickCount >= curCount + 20) {
+            clip.stop();
             CutSceneModal m = new CutSceneModal();
             m.showModal(MainThing.gameFrame, "src/images/credits.mp4");
         }
@@ -627,14 +682,19 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                     continue;
                 }
 
+                Mob mob1 = mobs.get(i);
+                Mob mob2 = mobs.get(j);
                 boolean removeMobs = false;
 
-                if (mobs.get(i).getClass() == Guard.class && mobs.get(j).getClass() == Guard.class
-                        && doSpritesCollide(mobs.get(i).x, mobs.get(i).y, mobs.get(j).x, mobs.get(j).y)) {
-                    Guard2 guard2 = new Guard2(mobs.get(i).x, mobs.get(i).y);
-                    removeMobs = true;
-                    mobs.add(guard2);
-                }
+                if(mob1 instanceof Guard && mob2 instanceof Guard){
+                    if(doSpritesCollide(mob1.x, mob1.y, mob2.x, mob2.y)){
+                        Guard2 guard2 = new Guard2(mob1.x, mob1.y);
+                        removeMobs = true;
+                        mobs.add(guard2);
+                    }
+                }               
+
+        
                 if (mobs.get(i).getClass() == Guard2.class && mobs.get(j).getClass() == Guard2.class
                         && doSpritesCollide(mobs.get(i).x, mobs.get(i).y, mobs.get(j).x, mobs.get(j).y)) {
                     Guard3 guard3 = new Guard3(mobs.get(i).x, mobs.get(i).y);
@@ -663,7 +723,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             tick();
             repaint();
             try {
-                Thread.sleep(31);
+                Thread.sleep(30);
             } catch (Exception e) {
 
             }

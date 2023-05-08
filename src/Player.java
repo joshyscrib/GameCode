@@ -85,6 +85,9 @@ public class Player {
             atk = 20;
             break;
         }
+        if(Panel.hasPomegranate){
+            atk += 4;
+        }
         if(Math.abs(tickCount) - lastAttackTick <= 10){
             return;
         }

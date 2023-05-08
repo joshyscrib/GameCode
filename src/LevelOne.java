@@ -97,7 +97,7 @@ public class LevelOne extends Panel{
             case 1:
             switch(dude.playerDirection){
                 case Up:
-                context.fillRect(placeX + 15, placeY - 25, 10, 30);
+                 context.fillRect(placeX + 15, placeY - 25, 10, 30);
                     break;
                 case Left:
                 context.fillRect(placeX,placeY + 27,-30,10);
