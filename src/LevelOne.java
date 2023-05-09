@@ -1,4 +1,7 @@
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -12,6 +15,12 @@ public class LevelOne extends Panel{
     Image cImage;
     Image pImage;
     Image iImage;
+    BufferedImage dagImage;
+    BufferedImage clayImage;
+    BufferedImage macImage;
+    BufferedImage darkImage;
+    double rotation = 0;
+
     @Override
     public void paint(Graphics g){
         if(hImage == null){
@@ -92,19 +101,69 @@ public class LevelOne extends Panel{
             context.setColor(lowHpColor);
             context.fillRect(0,0,704,704);
         }
+        java.net.URL img1 = getClass().getClassLoader().getResource("images/dagger.png");
+            try{
+                dagImage = ImageIO.read(img1);
+    
+            }
+            catch(IOException ex){
+                System.out.println("EXCEPTION ):  " + ex);
+            }
+            java.net.URL img2 = getClass().getClassLoader().getResource("images/claymore.png");
+            try{
+                clayImage = ImageIO.read(img2);
+            }
+            catch(IOException ex){
+                System.out.println("EXCEPTION ):  " + ex);
+            }
+            java.net.URL img3 = getClass().getClassLoader().getResource("images/mace.png");
+            try{
+                macImage = ImageIO.read(img3);
+    
+            }
+            catch(IOException ex){
+                System.out.println("EXCEPTION ):  " + ex);
+            }
+            java.net.URL img4 = getClass().getClassLoader().getResource("images/darkSword.png");
+            try{
+                darkImage = ImageIO.read(img4);
+    
+            }
+            catch(IOException ex){
+                System.out.println("EXCEPTION ):  " + ex);
+            }
+            int lx = 32/2 + placeX;
+            int ly = 32/2 + placeY;
+        AffineTransform tx = AffineTransform.getRotateInstance(rotation, lx, ly);
+        AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
        if(dude.isAttacking){
+        switch(dude.playerDirection){
+            case Up:
+            rotation = Math.toRadians(0);
+                break;
+            case Left:
+            rotation = Math.toRadians(270);
+                break;
+            case Down:
+            rotation = Math.toRadians(180);
+                break;
+            case Right:
+            rotation = Math.toRadians(90);
+                break;
+            
+        }
         switch(curWeapon){
             case 1:
-            
+            context.drawImage(op.filter(dagImage , null), lx, ly, null);
             break;
             case 2:
-
+            context.drawImage(op.filter(clayImage , null), lx, ly, null);
             break;
             case 3:
-
+            context.drawImage(op.filter(macImage , null), lx, ly, null);
             break;
             case 4:
-
+            context.drawImage(op.filter(darkImage , null), lx, ly, null);
             break;
         }
        }
