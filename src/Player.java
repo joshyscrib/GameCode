@@ -86,7 +86,7 @@ public class Player {
             break;
         }
         if(Panel.hasPomegranate){
-            atk += 4;
+            atk += 5;
         }
         if(Math.abs(tickCount) - lastAttackTick <= 10){
             return;
@@ -96,7 +96,7 @@ public class Player {
     //   int attackX = x + 32 + 30;
     //  int attackY = y + 30;
         for(Mob curMob : mobs){
-            if((curMob.x >= x - 36 && curMob.x <= x + 68 && curMob.y >= y - 35 && curMob.y <= y + 99) || (curMob.x + 35 >= x - 37 && curMob.x + 37 <= x + 67 && curMob.y >= y - 37 && curMob.y <= y + 98) || (curMob.x >= x - 35 && curMob.x <= x + 67 && curMob.y + 67 >= y - 36 && curMob.y + 64 <= y + 96) || (curMob.x + 32 >= x - 32 && curMob.x + 32<= x + 64 && curMob.y + 67 >= y - 38 && curMob.y + 7 <= y + 99)){
+            if((curMob.x >= x - 80 && curMob.x <= x + 68 && curMob.y >= y - 35 && curMob.y <= y + 99) || (curMob.x + 35 >= x - 80 && curMob.x + 37 <= x + 67 && curMob.y >= y - 37 && curMob.y <= y + 98) || (curMob.x >= x - 80 && curMob.x <= x + 67 && curMob.y + 67 >= y - 36 && curMob.y + 64 <= y + 96) || (curMob.x + 32 >= x - 80 && curMob.x + 32<= x + 64 && curMob.y + 67 >= y - 38 && curMob.y + 7 <= y + 99)){
                 System.out.println("hit!");
                 curMob.gotHit(atk, this.playerDirection);
             }

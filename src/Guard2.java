@@ -5,7 +5,7 @@ import javax.imageio.ImageIO;
 
 public class Guard2 extends Mob {
 
-    static int startingHp = 50;
+    static int startingHp = 80;
     private Image[] guardImages = new Image[2];
     int guardWidth = 64;
     int tickCount = 0;

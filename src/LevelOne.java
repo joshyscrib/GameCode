@@ -67,6 +67,10 @@ public class LevelOne extends Panel{
         context.setColor(new Color(30,1,60));
         context.fillRect(0,0,3000,3000);
         super.paint(g);
+
+        //sets color for shield
+        Color bubbleColor = new Color(47, 207, 224,75);
+
         for(int x = 0; x < xTiles; x++){
             for(int y = 0; y < yTiles; y++){
                 Tile curTile = tiles[x][y];
@@ -89,6 +93,7 @@ public class LevelOne extends Panel{
                             context.drawImage(iImage, x * 32, y * 32, 32, 32, null);
                         }
                     }
+                        
             }
         }
         dude.paint(context,placeX,placeY);
@@ -132,26 +137,34 @@ public class LevelOne extends Panel{
             catch(IOException ex){
                 System.out.println("EXCEPTION ):  " + ex);
             }
-            int lx = 32/2 + placeX;
-            int ly = 32/2 + placeY;
-        AffineTransform tx = AffineTransform.getRotateInstance(rotation, lx, ly);
-        AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
+            int lx = placeX;
+            int ly = placeY;
+      
        if(dude.isAttacking){
         switch(dude.playerDirection){
             case Up:
+            ly -= 60;
             rotation = Math.toRadians(0);
                 break;
             case Left:
+                lx -= 60;
             rotation = Math.toRadians(270);
                 break;
             case Down:
+            ly += 30;
             rotation = Math.toRadians(180);
                 break;
             case Right:
+            lx += 20;
             rotation = Math.toRadians(90);
                 break;
             
         }
+        if(curWeapon >= 4){
+            rotation -= Math.toRadians(45);
+        }
+        AffineTransform tx = AffineTransform.getRotateInstance(rotation, 33, 33);
+        AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
         switch(curWeapon){
             case 1:
             context.drawImage(op.filter(dagImage , null), lx, ly, null);
@@ -166,6 +179,32 @@ public class LevelOne extends Panel{
             context.drawImage(op.filter(darkImage , null), lx, ly, null);
             break;
         }
+       }
+       // context.drawImage(image1, 717, 252, null);
+       if(hasCroissant){
+        context.drawImage(cImage, 712, 348, 70, 70, null);
+       }
+       if(hasPomegranate){
+        context.drawImage(pImage, 717, 455, 60, 60, null);
+       }
+       if(hasIcee){
+        int amountLeft = 0;
+        context.drawImage(iImage, 718, 555, 58, 58, null);
+        if(dude.playerDirection == Direction.Left){
+            amountLeft = 10;
+        }
+        else{
+            amountLeft = 0;
+        }
+        if(iceeProtection <= 25){
+            bubbleColor = new Color(250, 0, 0, 75);
+        }
+        else{
+            bubbleColor = new Color(47, 207, 224,75);
+        }
+
+        context.setColor(bubbleColor);
+        context.fillOval(placeX - 12 - amountLeft, placeY - 7, 75, 75);
        }
     }
 }

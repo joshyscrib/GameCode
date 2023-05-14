@@ -27,12 +27,14 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     private static int TILE_WIDTH = 32;
     private static int TILE_HEIGHT = 32;
     static boolean hasPomegranate = false;
+    static boolean hasCroissant = false;
+    static boolean hasIcee = false;
     GameKeyListener listener = new GameKeyListener(this);
     public static int xTiles = 22;
-    public static int yTiles = 22;
+    public static int yTiles = 22;  
     Tile[][] tiles = new Tile[xTiles][yTiles];
     Item[][] items = new Item[xTiles][yTiles];
-
+    int iceeProtection;
     Player dude = new Player();
     Point location = MouseInfo.getPointerInfo().getLocation();
     double mouseX = location.getX();
@@ -149,6 +151,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                     items[X][Y] = null;
                 }
                 if (items[X][Y] != null && items[X][Y].getClass() == Croissant.class) {
+                    hasCroissant = true;
                     speed = 6;
                     spdEndTime = tickCount + 400;
                     items[X][Y] = null;
@@ -159,7 +162,9 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                     items[X][Y] = null;
                 }
                 if (items[X][Y] != null && items[X][Y].getClass() == Icee.class  ) {
+                    hasIcee = true;
                     items[X][Y] = null;
+                    iceeProtection = 75;
                 }
 
             }
@@ -185,10 +190,34 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         if (dude.hp >= 0) {
             context.fillRect(715, 215, 37, dude.hp * -2);
         }
+        // indicates weapon
         context.setColor(Color.GREEN);
         context.fillRect(715, 250, 70, 70);
         context.setColor(Color.BLACK);
         context.fillRect(717, 252, 66, 66);
+        // indicates power ups
+        context.setColor(Color.GREEN);
+        context.fillRect(715, 350, 70, 70);
+        context.setColor(Color.BLACK);
+        context.fillRect(717, 352, 66, 66);
+
+        context.setColor(Color.GREEN);
+        context.fillRect(715, 450, 70, 70);
+        context.setColor(Color.BLACK);
+        context.fillRect(717, 452, 66, 66);
+
+        context.setColor(Color.GREEN);
+        context.fillRect(715, 550, 70, 70);
+        context.setColor(Color.BLACK);
+        context.fillRect(717, 552, 66, 66);
+        context.setColor(Color.WHITE);
+        if(hasIcee){
+            if(iceeProtection < 0){
+                iceeProtection = 0;
+            }
+            // indicates shield health
+            context.drawString(iceeProtection + " / 75", 735, 640);
+        }
         Image image1 = null;
         Image image2 = null;
         Image image3 = null;
@@ -345,12 +374,14 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     int SPRITE_HEIGHT = 64;
     public void revertSpeed(){
         speed = 4;
+        hasCroissant = false;
     }
     public void revertStrength(){
         dude.atk = 8;
+        hasPomegranate = false;
     }
     public void revertShield(){
-        
+        hasIcee = false;
     }
     public boolean isPointInSprite2(int x, int y, int spriteX, int spriteY){
 
@@ -422,6 +453,12 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     }
 
     public void tick() {
+        // checks to remove power-ups
+        if(hasIcee){
+            if(iceeProtection <= 0){
+                revertShield();
+            }
+        }
         if(tickCount >= pomEndTime){
             revertStrength();
         }
@@ -446,20 +483,6 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                         loadNext(curLevel);
                     }
 
-                    /*
-                     * 
-                     * if((tileLeft >= placeX - 96 && tileLeft <= placeX + 96 && tileTop >= placeY -
-                     * 96 && tileTop <= placeY + 128)
-                     * || (tileLeft + 96 >= placeX - 96 && tileLeft + 96 <= placeX + 96 && tileTop
-                     * >= placeY - 96 && tileTop <= placeY + 128)
-                     * || (tileLeft >= placeX - 96 && tileLeft <= placeX + 96 && tileTop + 96 >=
-                     * placeY - 96 && tileTop + 96 <= placeY + 128)
-                     * || (tileLeft + 96 >= placeX - 96 && tileLeft + 96<= placeX + 96 && tileTop +
-                     * 96 >= placeY - 96 && tileTop + 96 <= placeY + 128)){
-                     * if(tiles[i][j].getClass() == WoodTile.class && dude.isAttacking)
-                     * tiles[i][j] = new FloorTile();
-                     * }
-                     */
 
                 }
             }
@@ -553,24 +576,55 @@ public class Panel extends JPanel implements Runnable, MouseListener {
 
                 mobs.remove(i);
                 if (curMob.isFast) {
-                    dude.hp -= 60;
+                    if(hasIcee){
+                        iceeProtection -= 60;
+                    }
+                    else{
+                        dude.hp -= 60;
+                    }
                 } else {
-                    dude.hp /= 2;
+                    if(hasIcee){
+                        iceeProtection -= 20;
+                    }
+                    else{
+                        dude.hp -= 20;
+                    }
                 }
 
             }
             if (playerTakeDamage(curMob.x, curMob.y)
                     && (curMob.getClass() == Guard.class || curMob.getClass() == Princess.class || curMob.getClass() == Guard2.class || curMob.getClass() == Guard3.class)
                     && tickCount % 12 == 0) {
-                dude.hp -= 20;
+                        if(hasIcee){
+                            iceeProtection -= 20;
+                        }
+                        else{
+                            dude.hp -= 20;
+                        }
+                
                 if (curMob.getClass() == Princess.class) {
-                    dude.hp -= 10;
+                    if(hasIcee){
+                        iceeProtection -= 10;
+                    }
+                    else{
+                        dude.hp -= 10;
+                    }
                 }
                 if(curMob.getClass() == Guard2.class){
-                    dude.hp -= 5;
+                    if(hasIcee){
+                        iceeProtection -= 5;
+                    }
+                    else{
+                        dude.hp -= 5;
+                    }
                 }
                 if(curMob.getClass() == Guard3.class){
-                    dude.hp -= 15;
+                    if(hasIcee){
+                        iceeProtection -= 15;
+                    }
+                    else{
+                        dude.hp -= 15;
+                    }
                 }
                 switch(curWeapon){
                     case 2:
