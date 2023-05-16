@@ -1,6 +1,8 @@
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dialog;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -58,6 +60,14 @@ public class CutSceneModal {
             
             ((Group) s.getRoot()).getChildren().add(viewer);
             modelDialog.add(jfxPanel);
+
+
+            modelDialog.addWindowListener(new WindowAdapter() {
+                public void windowClosing(WindowEvent e) {
+                  player.stop();
+                }
+              });
+ 
         });
       
        

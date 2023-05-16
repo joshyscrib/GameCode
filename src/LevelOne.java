@@ -206,5 +206,8 @@ public class LevelOne extends Panel{
         context.setColor(bubbleColor);
         context.fillOval(placeX - 12 - amountLeft, placeY - 7, 75, 75);
        }
+       context.setColor(Color.WHITE);
+       context.setFont(new Font("TimesRoman", Font.PLAIN, 20)); 
+       context.drawString("Score :" + score, 10, 730);
     }
 }

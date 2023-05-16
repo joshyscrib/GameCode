@@ -4,6 +4,7 @@ import javax.print.DocFlavor.URL;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
 import javax.swing.JPanel;
 import javax.swing.SpinnerDateModel;
 
@@ -47,9 +48,10 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     int curWeapon = 1;
     boolean hasPlayedCredits = false;
     Color lowHpColor = new Color(250, 5, 5, 50);
-    int curCount = 999999999;
+    int princessDeathTick = Integer.MAX_VALUE;
     int pomEndTime;
     int spdEndTime;
+    int score = 0;
     // here is a comment
     public void setMenuTile(Class c) {
         menuTile = c;
@@ -60,7 +62,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     }
 
     public void init() {
-
+        System.out.println(this);
         for (int i = 0; i < xTiles; i++) {
             for (int j = 0; j < yTiles; j++) {
                 tiles[i][j] = new FloorTile();
@@ -68,6 +70,8 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         }
         addMouseListener(this);
         try {
+            TitleModal titleScreen = new TitleModal();
+            titleScreen.showModal();
             CutSceneModal m = new CutSceneModal();
         m.showModal(MainThing.gameFrame, "src/images/openingscene.mp4");
         } catch (Exception e) {
@@ -559,6 +563,10 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             mobs.clear();
             dude.hp = 100;
             curLevel = 7;
+            revertShield();
+            revertSpeed();
+            revertStrength();
+            curWeapon = 1;
         }
         tickCount++;
         if (listener.attacking) {
@@ -641,6 +649,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             curMob.tick(tiles, dude, mobs);
             if (curMob.isDead()) {
                 mobs.remove(i);
+                score++;
             }
         }
 
@@ -722,22 +731,25 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         if (!princessFound && curLevel == 6) {
             // princess is dead
             if (!hasPlayedCredits) {
-                hasPlayedCredits = true;
-                curCount = tickCount;
-    clip.stop();
+
+                if(princessDeathTick == Integer.MAX_VALUE){
+                     princessDeathTick = tickCount;
+                }
+    
             }
         }
         if (dude.hp > 100) {
             dude.hp = 100;
         }
-        if (tickCount >= curCount + 20) {
+        if (tickCount - 20 >= princessDeathTick && !hasPlayedCredits) {
+            clip.stop();
             try {
                 CutSceneModal m = new CutSceneModal();
             m.showModal(MainThing.gameFrame, "src/images/credits.mp4");
             } catch (Exception e) {
                 // TODO: handle exception
             }
-            
+            hasPlayedCredits = true;
         }
         for (int i = 0; i < mobs.size(); i++) {
             for (int j = 0; j < mobs.size(); j++) {
@@ -815,7 +827,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             // Get a clip resource.
             clip = AudioSystem.getClip();
             clip.open(audioInputStream);
-
+            
             if (loop) {
                 clip.loop(Clip.LOOP_CONTINUOUSLY);
             } else {
