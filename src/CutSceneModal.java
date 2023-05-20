@@ -72,7 +72,7 @@ public class CutSceneModal {
       
        
      
-        modelDialog.setPreferredSize(new Dimension(520, 425));
+        modelDialog.setPreferredSize(new Dimension(525, 425));
 
         modelDialog.setLocation(300,300);
         modelDialog.pack();

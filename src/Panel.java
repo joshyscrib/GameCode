@@ -73,7 +73,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             TitleModal titleScreen = new TitleModal();
             titleScreen.showModal();
             CutSceneModal m = new CutSceneModal();
-        m.showModal(MainThing.gameFrame, "src/images/openingscene.mp4");
+        m.showModal(MainThing.gameFrame, "src/images/startingCutscene.mp4");
         } catch (Exception e) {
             // TODO: handle exception
         }
@@ -554,9 +554,6 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             }
         }
 
-        if (listener.healing && dude.hp < 100) {
-            dude.hp += 2;
-        }
         if (dude.hp <= 0) {
             load("LevelSeven.game ");
             dude.hasKey = true;
@@ -742,10 +739,10 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             dude.hp = 100;
         }
         if (tickCount - 20 >= princessDeathTick && !hasPlayedCredits) {
-            clip.stop();
+            clip = null;
             try {
                 CutSceneModal m = new CutSceneModal();
-            m.showModal(MainThing.gameFrame, "src/images/credits.mp4");
+            m.showModal(MainThing.gameFrame, "src/images/creditCutscene.mp4");
             } catch (Exception e) {
                 // TODO: handle exception
             }
@@ -829,9 +826,10 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             clip.open(audioInputStream);
             
             if (loop) {
-                clip.loop(Clip.LOOP_CONTINUOUSLY);
+     //           clip.loop(Clip.LOOP_CONTINUOUSLY);
+     clip.start();
             } else {
-                clip.start();
+                
             }
         } catch (Exception e) {
 
@@ -902,7 +900,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                 break;
 
         }
-        if (placeTile != null) {
+        if (placeTile != null && listener.devMode) {
             tiles[(int) (x / 32)][(int) (y / 32)] = placeTile;
         }
     }
@@ -970,7 +968,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                 placeTile = new IceeTile();
                 break;
         }
-        if (placeTile != null) {
+        if (placeTile != null  && listener.devMode) {
             tiles[(int) (x / 32)][(int) (y / 32)] = placeTile;
         }
     }
@@ -1038,7 +1036,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                 placeTile = new IceeTile();
                 break;
         }
-        if (placeTile != null) {
+        if (placeTile != null && listener.devMode) {
             tiles[(int) (x / 32)][(int) (y / 32)] = placeTile;
         }
     }
@@ -1116,7 +1114,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
                 placeTile = new IceeTile();
                 break;
         }
-        if (placeTile != null) {
+        if (placeTile != null && listener.devMode) {
             tiles[(int) (x / 32)][(int) (y / 32)] = placeTile;
         }
     }

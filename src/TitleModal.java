@@ -23,7 +23,7 @@ public class TitleModal implements MouseListener{
         modelDialog.addMouseListener(this);
         modelDialog.add(panel);
 
-        URL img = getClass().getClassLoader().getResource("images/barrelTile.png");
+        URL img = getClass().getClassLoader().getResource("images/titleScreen.png");
         try{
         Image image = ImageIO.read(img);
         JLabel picLabel = new JLabel(new ImageIcon(image));
@@ -33,7 +33,7 @@ public class TitleModal implements MouseListener{
             System.out.println("EXCEPTION ):  " + ex);
         }
 
-        modelDialog.setPreferredSize(new Dimension(800, 600));
+        modelDialog.setPreferredSize(new Dimension(1536, 1086));
 
         modelDialog.setLocation(300,300);
         modelDialog.pack();

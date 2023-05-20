@@ -8,7 +8,7 @@ public class GameKeyListener implements KeyListener {
     public boolean downing = false;
     public boolean righting = false;
     public boolean attacking = false;
-    public boolean healing = false;
+    public boolean devMode = false;
 
     public GameKeyListener(Panel panel) {
 
@@ -40,7 +40,7 @@ public class GameKeyListener implements KeyListener {
                 attacking = true;
                 break;
             case 72:
-                healing = true;
+                devMode = !devMode;
                 break;
         }
     }
@@ -63,9 +63,6 @@ public class GameKeyListener implements KeyListener {
                 break;
             case 32:
                 attacking = false;
-                break;
-            case 72:
-                healing = false;
                 break;
         }
     }
