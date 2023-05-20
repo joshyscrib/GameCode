@@ -99,6 +99,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     }
 
     public void load(String place) {
+        clearAll();
         try {
             FileInputStream thing = new FileInputStream(new File(place));
             ObjectInputStream stream = new ObjectInputStream(thing);
@@ -184,7 +185,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             tiles[0][0].drawTile(context, 0, 0);
         }
         context.setColor(Color.BLACK);
-        context.fillRect(708, 8, 51, 215);
+        context.fillRect(106, 708, 215, 51);
         context.setColor(Color.GREEN);
         if (dude.hp <= 45) {
             context.setColor(Color.YELLOW);
@@ -192,9 +193,12 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         if (curLevel == 7 || dude.hp <= 20) {
             context.setColor(Color.RED);
         }
+        // shows health bar
         if (dude.hp >= 0) {
-            context.fillRect(715, 215, 37, dude.hp * -2);
+            context.fillRect(112, 715,  dude.hp * 2,37);
         }
+        // tells exact amount of health
+        context.drawString("HP: " + dude.hp + " / 100",175, 775);
         // indicates weapon
         context.setColor(Color.GREEN);
         context.fillRect(715, 250, 70, 70);
@@ -216,12 +220,35 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         context.setColor(Color.BLACK);
         context.fillRect(717, 552, 66, 66);
         context.setColor(Color.WHITE);
+        // tips based on level
+        context.setFont(new Font("TimesRoman", Font.PLAIN, 20)); 
+        if(curLevel == 1){
+            context.drawString("Attack wood to break it!", 710, 125);
+        }
+        if(curLevel == 2){
+            context.drawString("Open the chest to get a new weapon!", 710, 125);
+        }
+        if(curLevel == 3){
+            context.drawString("Pick up a potion to regain some health!", 710, 125);
+        }
+        if(curLevel == 4){
+            context.drawString("Grab a pomegranate to deal more damage to guards!", 710, 125);
+        }
+        if(curLevel == 5){
+            context.drawString("Get a croissant to go FAST!", 710, 125);
+        }
+        if(curLevel == 6){
+            context.drawString("Quick! Pick up an icee to block the princess's fireballs!", 710, 125);
+        }
+        if(curLevel == 7){
+            context.drawString("Follow the Arrow to respawn.", 710, 125);
+        }
         if(hasIcee){
             if(iceeProtection < 0){
                 iceeProtection = 0;
             }
             // indicates shield health
-            context.drawString(iceeProtection + " / 75", 735, 640);
+            context.drawString(iceeProtection + " / 75", 720, 640);
         }
         Image image1 = null;
         Image image2 = null;
@@ -458,7 +485,9 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     }
 
     public void tick() {
-        
+        if(listener.devMode){
+            dude.hp = 100;
+        }
         if(curLevel == 6 && hasPaused == false){
             pause();
             hasPaused = true;
@@ -570,6 +599,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             revertSpeed();
             revertStrength();
             curWeapon = 1;
+            score = 0;
         }
         tickCount++;
         if (listener.attacking) {
@@ -651,7 +681,12 @@ public class Panel extends JPanel implements Runnable, MouseListener {
             }
             curMob.tick(tiles, dude, mobs);
             if (curMob.isDead()) {
+                try{
                 mobs.remove(i);
+                }
+                catch(Exception ex){
+                    
+                }
                 score++;
             }
         }

@@ -35,7 +35,7 @@ public class TitleModal implements MouseListener{
 
         modelDialog.setPreferredSize(new Dimension(1536, 1086));
 
-        modelDialog.setLocation(300,300);
+        modelDialog.setLocation(800,400);
         modelDialog.pack();
         modelDialog.setVisible(true);
         modelDialog.setResizable(false);

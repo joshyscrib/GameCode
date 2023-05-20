@@ -53,7 +53,7 @@ public class CutSceneModal {
             JFXPanel jfxPanel = new JFXPanel();
             
             Group box = new Group();
-            Scene s = new Scene(box, 380,275);
+            Scene s = new Scene(box, 290,275);
             jfxPanel.setScene(s);
     
         
@@ -74,7 +74,7 @@ public class CutSceneModal {
      
         modelDialog.setPreferredSize(new Dimension(525, 425));
 
-        modelDialog.setLocation(300,300);
+        modelDialog.setLocation(800,400);
         modelDialog.pack();
         modelDialog.setVisible(true);
         modelDialog.setResizable(false);
