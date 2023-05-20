@@ -3,6 +3,7 @@ import javax.imageio.ImageIO;
 import javax.print.DocFlavor.URL;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.BooleanControl;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.DataLine;
 import javax.swing.JPanel;
@@ -22,7 +23,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     private String filename;
     private Player player;
     private Clip clip;
-
+    boolean hasPaused = false;
     private static int PLAYER_HEIGHT = 64;
     private static int PLAYER_WIDTH = 64;
     private static int TILE_WIDTH = 32;
@@ -80,7 +81,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         
         
         load("LevelOne.game");
-        play("images/dungeonMusic.wav", true);
+        playMusic("images/dungeonMusic.wav", true);
     }
 
     public void save(String place) {
@@ -457,6 +458,11 @@ public class Panel extends JPanel implements Runnable, MouseListener {
     }
 
     public void tick() {
+        
+        if(curLevel == 6 && hasPaused == false){
+            pause();
+            hasPaused = true;
+        }
         // checks to remove power-ups
         if(hasIcee){
             if(iceeProtection <= 0){
@@ -568,7 +574,7 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         tickCount++;
         if (listener.attacking) {
             if (Math.abs(dude.tickCount) - dude.lastAttackTick > 10) {
-                play("images/swordSwoosh.wav", false);
+                playSound("images/swordSwoosh.wav");
             }
             dude.attack(mobs, placeX, placeY, curWeapon);
         }
@@ -817,19 +823,19 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         this.filename = filename;
     }
 
-    public void play(String file, boolean loop) {
+    public void playMusic(String file, boolean loop) {
         try {
             java.net.URL url = this.getClass().getResource(file);
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(url);
             // Get a clip resource.
             clip = AudioSystem.getClip();
             clip.open(audioInputStream);
-            
+       
             if (loop) {
-     //           clip.loop(Clip.LOOP_CONTINUOUSLY);
-     clip.start();
+               clip.loop(Clip.LOOP_CONTINUOUSLY);
+                clip.start();
             } else {
-                
+ 
             }
         } catch (Exception e) {
 
@@ -837,6 +843,23 @@ public class Panel extends JPanel implements Runnable, MouseListener {
         }
     }
 
+    public void playSound(String file) {
+        try {
+            java.net.URL url = this.getClass().getResource(file);
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(url);
+            // Get a clip resource.
+            Clip currentClip = AudioSystem.getClip();
+            currentClip.open(audioInputStream);
+            currentClip.start();
+        } catch (Exception e) {
+
+            System.out.println(e);
+        }
+    }
+    public void pause(){
+        clip.stop();
+        playMusic("images/princessMusic.wav", true);
+    }
     @Override
     public void mouseClicked(MouseEvent e) {
         int x = e.getX();

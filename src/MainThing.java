@@ -30,7 +30,7 @@ public class MainThing {
         Panel myPanel = new LevelOne("images/dungeonMusic.mp3");
         myFrame.add(myPanel);
         myFrame.setVisible(true);
-        myFrame.setSize(900,900);
+        myFrame.setSize(2560,1440);
         myFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         ImageIcon img = new ImageIcon("images/wolf-2.png");
@@ -158,13 +158,13 @@ public class MainThing {
         IceeTileItem.addActionListener(action -> myPanel.setMenuTile(IceeTile.class));
 
         // add an about menu
-        Menu about = new Menu("About");
+        Menu about = new Menu("View Credits");
         bar.add(about);
-        MenuItem aboutGame = new MenuItem("About Game");
+        MenuItem aboutGame = new MenuItem("Credits");
         about.add(aboutGame);
         aboutGame.addActionListener(action -> {
             CutSceneModal m = new CutSceneModal();
-            m.showModal(gameFrame, "src/images/openingscene.mp4");
+            m.showModal(gameFrame, "src/images/creditCutscene.mp4");
         });
         myFrame.setMenuBar(bar);
 

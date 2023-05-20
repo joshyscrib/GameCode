@@ -39,7 +39,7 @@ public class GameKeyListener implements KeyListener {
             case 32:
                 attacking = true;
                 break;
-            case 72:
+            case 48:
                 devMode = !devMode;
                 break;
         }

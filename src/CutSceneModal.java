@@ -30,7 +30,7 @@ public class CutSceneModal {
     public void showModal(JFrame parent, String imagePath){
 
         com.sun.javafx.application.PlatformImpl.startup(()->{});
-        JDialog modelDialog = new JDialog(MainThing.gameFrame, "do you want to have a bad time?", true);
+        JDialog modelDialog = new JDialog(MainThing.gameFrame, "Horrificus", true);
 
         JPanel panel = new JPanel();
         panel.setSize(800,600);

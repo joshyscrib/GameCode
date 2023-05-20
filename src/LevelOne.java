@@ -209,5 +209,10 @@ public class LevelOne extends Panel{
        context.setColor(Color.WHITE);
        context.setFont(new Font("TimesRoman", Font.PLAIN, 20)); 
        context.drawString("Score :" + score, 10, 730);
+       if(listener.devMode){
+        context.setColor(Color.RED);
+       context.setFont(new Font("TimesRoman", Font.PLAIN, 30)); 
+       context.drawString("DEV", 10, 760);
+       }
     }
 }

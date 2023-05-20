@@ -16,7 +16,7 @@ public class TitleModal implements MouseListener{
    JDialog modelDialog;
 
     public void showModal(){
-         modelDialog = new JDialog(MainThing.gameFrame, "Click to start", true);
+         modelDialog = new JDialog(MainThing.gameFrame, "Horrificus", true);
 
         JPanel panel = new JPanel();
         panel.setSize(800,600);
